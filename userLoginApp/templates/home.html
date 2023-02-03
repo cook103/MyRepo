@@ -1,0 +1,67 @@
+<!DOCTYPE html lang=en>
+
+    <head>
+        <title>Home</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
+        <style>
+
+            .container{
+                color:red;
+            }
+
+            #logout{
+                color: black;
+            }
+        </style>
+
+    </head>
+
+    <body>
+ 
+        <div>
+            {{user}}
+            <p>Welcome to the home page!</p>
+                
+            <button id="logout">logout</button>
+        </div>
+
+        <div class="container"></div>
+
+    </body>
+
+
+    <script>
+        function logout(){
+            $(document).ready(function(){
+                $('#logout').click(function(){   //Onclick return json to server (THIS IS THE SERVER FRAMEWORK I WILL USE!)
+                    $.ajax({
+                    url:'/logout',
+                    type: 'POST',
+                    data:{status:"success"},
+                    success: function(response){
+                        if (response.redirect) {
+                            window.location.href = response.redirect;
+                        }                     
+                      }
+                    });  
+                });
+            });
+        }
+        logout();
+    </script>
+
+
+
+
+
+</html>
+
+
+
+
+
+
+
+
+
