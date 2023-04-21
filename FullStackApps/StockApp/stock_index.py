@@ -1,19 +1,10 @@
-from flask import (
-        Flask,
-        request,
-        render_template,
-        jsonify,
-        redirect,
-        url_for,
-        session)
-
+import sys
+#the server is back one dir
+sys.path.append('..')
 import requests
 from bs4 import BeautifulSoup
 
-
-app = Flask(__name__)
-app.secret_key = "password"
-
+import flask_server
 def parse(url):
     """Parse the given url's html if input type
     is a string"""
@@ -51,12 +42,10 @@ def parsed_data(data):
 
     return data_dict
 
-@app.route("/",methods=['GET'])
+@flask_server.app.route("/",methods=['GET'])
 def get_scraped_data():
     data = parse("https://www.google.com/finance/markets/indexes") 
     data = parsed_data(data)
     return data
 
-
-if __name__ == "__main__":
-    app.run(debug=True)
+flask_server.StartWebServer()
