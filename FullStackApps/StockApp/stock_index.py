@@ -5,7 +5,8 @@ from flask import (
         jsonify,
         redirect,
         url_for,
-        session)
+        session,
+        json)
 
 import requests
 from bs4 import BeautifulSoup
@@ -50,14 +51,15 @@ def parsed_data(data):
 app = Flask(__name__)
 app.secret_key = "password"
 
-@app.route("/",methods=['GET'])
+@app.route("/",methods=['GET','POST'])
 def get_scraped_data():
     data = parse("https://www.google.com/finance/markets/indexes") 
     data = parsed_data(data)
-    return data
+    print("data sent")
+    return render_template("stock_index.html", data=data)
 
 def main():
-    app.run(debug=True)
+    app.run(debug=True, port="8080")
 
 if __name__ == "__main__":
     main()

@@ -11,19 +11,17 @@
     </head>
 
     <body>
- 
-        <div>
-            <!-- {{user}} --> 
-            <p>Daily Movement!</p>
-        </div>
+        <h1>Daily Movement</h1>
+        
+        <div class="container"></div>
+
 
 
     </body>
 
 
-    <script>
-    </script>
-
+    <script type="text/javascript">window.data = ({{ data | tojson }});</script>
+    <script src="{{url_for('static', filename='main.js')}}"></script>
 
 
 </html>
