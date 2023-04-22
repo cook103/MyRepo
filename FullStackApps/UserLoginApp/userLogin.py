@@ -11,7 +11,7 @@ app = Flask(__name__)
 app.secret_key = "password"
 
 #Simple Test Data Base
-userList = [
+user_list = [
     {'user':'mcookjr','key':'password'},
 ]
 
@@ -28,7 +28,7 @@ def signup():
     if request.method == 'POST':
         newUsername = request.form['username']
         newPassword = request.form['password']
-        userList.append({'user':newUsername,'key':newPassword})
+        user_list.append({'user':newUsername,'key':newPassword})
         return jsonify({'redirect':"/"})
     return render_template('signup.html')    
 
@@ -44,7 +44,7 @@ def submit():
     if request.method=='POST':
         username = request.form['username']
         password = request.form['password']
-        for tElem in userList:
+        for tElem in user_list:
             if username == tElem['user'] and password == tElem['key']:
                 status['status'] = "logged in"
                 session['user'] = username  
@@ -68,7 +68,9 @@ def logout():
         return jsonify({"redirect":"/logout"})
     return redirect(url_for('login'))
 
+def main():
+    app.run(debug=True)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    main()
 
