@@ -2,10 +2,11 @@
 
     <head>
         <title>stock index</title>
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-
+        <script src="{{url_for('static', filename='main.js')}}"></script>
+        
         <style>
-
         </style>
 
     </head>
@@ -13,24 +14,18 @@
     <body>
         <h1>Daily Movement</h1>
         
-        <div class="container"></div>
+        <div class="stock_container"></div><br>
+        <div class="crypto_container"></div>
 
+        <!-- Receiving data from backend and sending it to main.js to handle-->
+        <script type="text/javascript">window.stock_dict = ({{ stock_dict | tojson }});
+                                            window.crypto_dict = ({{ crypto_dict | tojson }});</script>
 
 
     </body>
 
 
-    <script type="text/javascript">window.data = ({{ data | tojson }});</script>
-    <script src="{{url_for('static', filename='main.js')}}"></script>
 
 
 </html>
-
-
-
-
-
-
-
-
 

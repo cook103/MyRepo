@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from flask import ( 
         Flask,
         request,
@@ -21,7 +22,8 @@ def parse(url):
         raise TypeError("Must be a string input")
     return soup
 
-def parsed_data(data):
+#TODO: make more adaptable, html scrapping is hard coded
+def scraped_parsed_data(data):
     """find and store parsed html data;
     stock index: names, price, dollar change,
     and percent change"""
@@ -51,12 +53,20 @@ def parsed_data(data):
 app = Flask(__name__)
 app.secret_key = "password"
 
-@app.route("/",methods=['GET','POST'])
-def get_scraped_data():
-    data = parse("https://www.google.com/finance/markets/indexes") 
-    data = parsed_data(data)
-    print("data sent")
-    return render_template("stock_index.html", data=data)
+#GET data sent on page refresh
+@app.route("/",methods=['GET'])
+def return_scraped_data():
+    print("scraped data sent")
+    
+    #need to scrape here for constant calls!
+    stock_data = parse("https://www.google.com/finance/markets/indexes") 
+    crypto_data = parse("https://www.google.com/finance/markets/cryptocurrencies")
+
+    stock_dict = scraped_parsed_data(stock_data)
+    crypto_dict = scraped_parsed_data(crypto_data)
+
+    return render_template("stock_index.html", stock_dict=stock_dict,
+                                                crypto_dict=crypto_dict)
 
 def main():
     app.run(debug=True, port="8080")
@@ -64,3 +74,4 @@ def main():
 if __name__ == "__main__":
     main()
 
+#end
