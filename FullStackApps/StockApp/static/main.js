@@ -1,25 +1,19 @@
 window.onload = function(){
 
+    //preset containers to manipulate
     let tStockContainer = $('.stock_container');
     let tCryptoContainer = $('.crypto_container');
 
-    //TODO: need to split name and price into stacked divs or span
-    /*
-    for (let tELem in stock_data["name"] && stock_data["price"]){
-        tStockContainer.append('<div class="name">' + stock_data["name"][tELem] +
-                 ": " + stock_data["price"][tELem]+  '</div>');
-    }
+    //On page load, instantiate the html with backend data
+    tStockContainer.append('<div class="stock_name">' + 
+        onload_data["stock_name"] + ": " + onload_data["stock_price"]+  '</div><br>');
 
-    for (let tELem in crypto_data["name"] && crypto_data["price"]){
-        tCryptoContainer.append('<div class="name">' + crypto_data["name"][tELem] +
-                 ": " + crypto_data["price"][tELem]+  '</div>');
-    }
-    
-    */
+    tCryptoContainer.append('<div class="crypto_name">' +  
+        onload_data["crypto_name"] + ": " + onload_data["crypto_price"]+ '</div><br>');
 
     function recurring_data(){
-        setTimeout(recurring_data,2000);
-        let x = "";
+        /*grab updated scraped data every second*/
+        setTimeout(recurring_data,1000);
 
         $.ajax({
         url:'/ReccuringData',
@@ -27,18 +21,17 @@ window.onload = function(){
         dataType: "json",
         success: function(data){
                 console.log(JSON.stringify(data)); 
+
+                stock_class = $('.stock_name');
+                crypto_class = $('.crypto_name');
                 
-                for (let tELem in data["crypto_name"] && data["crypto_price"]){
-                    tCryptoContainer.append('<div class="name">' + data["crypto_name"][tELem] +
-                             ": " + data["crypto_price"][tELem]+  '</div>');
-                }
+                //during recurring calls, update the html
+                stock_class.text(data["stock_name"] +": " + data["stock_price"]);
+                crypto_class.text(data["crypto_name"] +": " + data["crypto_price"]);
+
+
             }
         });
-
-        /*
-
-        */
-    
 
 
     }

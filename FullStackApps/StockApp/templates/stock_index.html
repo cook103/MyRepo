@@ -7,6 +7,10 @@
         <script src="{{url_for('static', filename='main.js')}}"></script>
         
         <style>
+            body { background-color: rgb(0, 0, 0);}
+            h1 { color: white}
+            title { color: white;}
+            .data{ color: white;}
         </style>
 
     </head>
@@ -14,16 +18,17 @@
     <body>
         <h1>Daily Movement</h1>
         
-        <div class="stock_container"></div><br>
-        <div class="crypto_container"></div>
+        <!-- default container to manipulate in JS-->
+        
+        <div class="data">
+            <div class="stock_container"></div><br>
+            <div class="crypto_container"></div>
+        </div>
 
-
-
-      
-
+        <!-- script gets onload data from backend and sends to js file-->
+        <script type="text/javascript">window.onload_data = ({{ onload_data | tojson }});</script>
 
     </body>
-
 
 
 

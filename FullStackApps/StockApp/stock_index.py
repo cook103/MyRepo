@@ -45,14 +45,15 @@ def scraped_parsed_data():
             'crypto_price' : crypto_price[:6],
     }
 
-    return json.dumps(data_dict)
+    return data_dict
 
 app = Flask(__name__)
 app.secret_key = "password"
 
 @app.route("/",methods=['GET','POST'])
 def retrurn_index():
-    return render_template("stock_index.html")
+    onload_data = scraped_parsed_data()
+    return render_template("stock_index.html",  onload_data=onload_data)
 
 
 #GET data sent on page refresh
@@ -60,7 +61,7 @@ def retrurn_index():
 def return_scraped_data():    
     data = scraped_parsed_data()
     print(f"dict data: {data}")
-    return data
+    return json.dumps(data)
 
 
 def main():
