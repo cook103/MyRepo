@@ -50,15 +50,16 @@ def scraped_parsed_data():
 app = Flask(__name__)
 app.secret_key = "password"
 
+
 @app.route("/",methods=['GET','POST'])
-def retrurn_index():
+def return_index():
+    """Onload data is sent here"""
     onload_data = scraped_parsed_data()
     return render_template("stock_index.html",  onload_data=onload_data)
 
-
-#GET data sent on page refresh
 @app.route("/ReccuringData",methods=['GET','POST'])
 def return_scraped_data():    
+    """Reccuring data is sent here"""
     data = scraped_parsed_data()
     print(f"dict data: {data}")
     return json.dumps(data)
