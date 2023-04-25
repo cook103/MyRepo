@@ -11,6 +11,28 @@ window.onload = function(){
     tCryptoContainer.append('<div class="crypto_name">' +  
         onload_data["crypto_name"] + ": " + onload_data["crypto_price"]+ '</div><br>');
 
+    function canvas(){
+            var canvasB = document.getElementById("canvas_background");
+            var canvasH = document.getElementById("canvas_header");
+
+            var ctxB = canvasB.getContext("2d");
+            var ctxB = canvasB.getContext('2d');
+
+            var ctxH = canvasH.getContext("2d");
+            var ctxH = canvasH.getContext('2d');
+
+            ctxB.fillStyle = 'red';
+            ctxB.globalAlpha = 0.4;
+            ctxB.fillRect(0,0,1500,300);
+
+            ctxH.fillStyle = 'red';
+            ctxH.globalAlpha = 0.4;
+            ctxH.fillRect(0,0,200,50);
+
+
+    
+    }
+
     function recurring_data(){
         /*grab updated scraped data every second*/
         setTimeout(recurring_data,1000);
@@ -35,7 +57,9 @@ window.onload = function(){
 
 
     }
-    recurring_data()
+    canvas();
+    recurring_data();
+    
 
 }
 

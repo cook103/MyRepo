@@ -7,22 +7,53 @@
         <script src="{{url_for('static', filename='main.js')}}"></script>
         
         <style>
-            body { background-color: rgb(0, 0, 0);}
-            h1 { color: white}
-            title { color: white;}
-            .data{ color: white;}
+            body { background-color: rgb(0, 0, 0); }
+            h1 { color: white; }
+            title { color: white; }
+
+            .data { 
+                color: white;
+                position: absolute ;
+                top:200px;
+                left:70px;
+            }
+            
+            #canvas_background {
+                position: absolute ;
+                top:150px;
+                left:40px;
+
+            }
+
+            #canvas_header {
+                position: absolute ;
+                top:60px;
+                left:40px;
+
+            }
+            
+            #head { color: white; position: absolute; top: 55px; left: 50px; }
+       
+
         </style>
 
     </head>
 
     <body>
-        <h1>Daily Movement</h1>
+        <h1></h1>
         
         <!-- default container to manipulate in JS-->
         
-        <div class="data">
-            <div class="stock_container"></div><br>
-            <div class="crypto_container"></div>
+        <div class="main">
+                <canvas id="canvas_header" width="200" height="200"></canvas>
+                <canvas id="canvas_background" width="1500" height="200"></canvas>
+                
+                <h2 id="head">Daily Movement</h2>
+                
+                <div class="data">
+                    <div class="stock_container"></div><br>
+                    <div class="crypto_container"></div>
+                </div>
         </div>
 
         <!-- script gets onload data from backend and sends to js file-->

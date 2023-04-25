@@ -48,8 +48,6 @@ def scraped_parsed_data():
     return data_dict
 
 app = Flask(__name__)
-app.secret_key = "password"
-
 
 @app.route("/",methods=['GET','POST'])
 def return_index():
