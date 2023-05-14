@@ -20,19 +20,25 @@
             
             #canvas_background {
                 position: absolute ;
-                top:150px;
+                top:180px;
                 left:40px;
 
             }
 
             #canvas_header {
                 position: absolute ;
-                top:60px;
+                top:62px;
                 left:40px;
 
             }
+
+            .c_prices{
+                position: relative ;
+                top: -215px;
+                left:300px;
+            }
             
-            #head { color: white; position: absolute; top: 55px; left: 50px; }
+            #head { color: white; position: absolute; top: 55px; left: 80px; }
        
 
         </style>
@@ -46,13 +52,20 @@
         
         <div class="main">
                 <canvas id="canvas_header" width="200" height="200"></canvas>
-                <canvas id="canvas_background" width="1500" height="200"></canvas>
+                <canvas id="canvas_background" width="1500" height="500"></canvas>
                 
-                <h2 id="head">Daily Movement</h2>
+                <h2 id="head">Crypto</h2>
                 
                 <div class="data">
-                    <div class="stock_container"></div><br>
-                    <div class="crypto_container"></div>
+                    <div class="stock_container">
+
+                    </div><br>
+            
+                    <div class="crypto_container">
+                        <div class="c_names"></div>
+
+                        <div class="c_prices"></div>
+                    </div>
                 </div>
         </div>
 

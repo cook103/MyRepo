@@ -1,36 +1,45 @@
 window.onload = function(){
 
-    //preset containers to manipulate
-    let tStockContainer = $('.stock_container');
-    let tCryptoContainer = $('.crypto_container');
-
     //On page load, instantiate the html with backend data
-    tStockContainer.append('<div class="stock_name">' + 
-        onload_data["stock_name"] + ": " + onload_data["stock_price"]+  '</div><br>');
+        for (let tElem in onload_data["crypto_name"]){
+        $(".c_names").append('<div id="crypto_name' + tElem + '">' + 
+            onload_data["crypto_name"][tElem] +  '</div><br>');
+    }
+    
+    
+    for (let tElem in onload_data["crypto_price"]){
+        $(".c_prices").append('<div id="crypto_price' + tElem + '">' + 
+            onload_data["crypto_price"][tElem] +  '</div><br>');
+    }
 
-    tCryptoContainer.append('<div class="crypto_name">' +  
-        onload_data["crypto_name"] + ": " + onload_data["crypto_price"]+ '</div><br>');
 
     function canvas(){
-            var canvasB = document.getElementById("canvas_background");
-            var canvasH = document.getElementById("canvas_header");
+        //make shapes on webpage (design)
+        var canvasB = document.getElementById("canvas_background");
+        var canvasH = document.getElementById("canvas_header");
 
-            var ctxB = canvasB.getContext("2d");
-            var ctxB = canvasB.getContext('2d');
+        var ctxB = canvasB.getContext("2d");
+        var ctxB = canvasB.getContext('2d');
 
-            var ctxH = canvasH.getContext("2d");
-            var ctxH = canvasH.getContext('2d');
+        var ctxH = canvasH.getContext("2d");
+        var ctxH = canvasH.getContext('2d');
 
-            ctxB.fillStyle = 'red';
-            ctxB.globalAlpha = 0.4;
-            ctxB.fillRect(0,0,1500,300);
+        ctxB.fillStyle = 'red';
+        ctxB.globalAlpha = 0.4;
+        ctxB.fillRect(0,0,1500,300);
 
-            ctxH.fillStyle = 'red';
-            ctxH.globalAlpha = 0.4;
-            ctxH.fillRect(0,0,200,50);
+        ctxH.fillStyle = 'red';
+        ctxH.globalAlpha = 0.4;
+        ctxH.fillRect(0,0,200,50);
 
+    }
 
-    
+    function update_page(data){
+        //update price elements
+        for (let index in data["crypto_price"]){
+            $("#crypto_price" + index).text(data["crypto_price"][index]);
+        }
+
     }
 
     function recurring_data(){
@@ -42,16 +51,8 @@ window.onload = function(){
         type: 'GET',
         dataType: "json",
         success: function(data){
-                console.log(JSON.stringify(data)); 
-
-                stock_class = $('.stock_name');
-                crypto_class = $('.crypto_name');
-                
-                //during recurring calls, update the html
-                stock_class.text(data["stock_name"] +": " + data["stock_price"]);
-                crypto_class.text(data["crypto_name"] +": " + data["crypto_price"]);
-
-
+                //console.log(JSON.stringify(data)); 
+                update_page(data);
             }
         });
 
