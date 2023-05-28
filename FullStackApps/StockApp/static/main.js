@@ -12,27 +12,29 @@ window.onload = function(){
             onload_data["crypto_price"][tElem] +  '</div><br>');
     }
 
-
+/*
     function canvas(){
         //make shapes on webpage (design)
         var canvasB = document.getElementById("canvas_background");
-        var canvasH = document.getElementById("canvas_header");
+        //var canvasH = document.getElementById("crypto_header");
 
         var ctxB = canvasB.getContext("2d");
         var ctxB = canvasB.getContext('2d');
 
-        var ctxH = canvasH.getContext("2d");
-        var ctxH = canvasH.getContext('2d');
+        //var ctxH = canvasH.getContext("2d");
+        //var ctxH = canvasH.getContext('2d');
 
         ctxB.fillStyle = 'red';
         ctxB.globalAlpha = 0.4;
-        ctxB.fillRect(0,0,1500,300);
+        ctxB.fillRect(0,0,2000,300);
 
-        ctxH.fillStyle = 'red';
-        ctxH.globalAlpha = 0.4;
-        ctxH.fillRect(0,0,200,50);
+        //ctxH.fillStyle = 'red';
+        //ctxH.globalAlpha = 0.4;
+        //ctxH.fillRect(0,0,110,50);
 
     }
+*/
+
 
     function update_page(data){
         //update price elements
@@ -58,7 +60,7 @@ window.onload = function(){
 
 
     }
-    canvas();
+
     recurring_data();
     
 
