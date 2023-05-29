@@ -3,65 +3,12 @@
     <head>
         <title>Calculator</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-
-        <style>
-
-        body{
-            background-color: black;
-        }
-        button {
-            background-color: #d66909;
-            border-radius: 8px;
-            border-style: none;
-            box-sizing: border-box;
-            color: #FFFFFF;
-            cursor: pointer;
-            display: inline-block;
-            font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
-            font-size: 14px;
-            font-weight: 500;
-            height: 40px;
-            line-height: 20px;
-            list-style: none;
-            margin: 0;
-            outline: none;
-            padding: 10px 16px;
-            position: relative;
-            text-align: center;
-            text-decoration: none;
-            transition: color 100ms;
-            vertical-align: baseline;
-            user-select: none;
-            -webkit-user-select: none;
-            touch-action: manipulation;
-        }
-
-        #layout{
-            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-            background-color: grey;
-            position:absolute;
-            left: 50px;
-            top: 50px;
-            padding: 30px;
-            border-radius: 10px;
-        }
-
-        #layout #screen{
-            border-radius: 5px;
-            background-color: rgb(177, 173, 173);
-            padding: 5px;
-        }
-
-        #layout #zero{
-            padding-right:65px;
-
-        }
-        </style>
-
+        <script src="{{url_for('static', filename='calculator.js')}}"></script>
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='calculator.css')}}">
+        
     </head>
 
     <body>
-        
         <div id="layout">
             <input id="screen" disabled></input>
             <br><br>
@@ -98,32 +45,6 @@
         <div class="container"></div>
 
     </body>
-
-    <script>
-        const buttons = document.querySelectorAll('button');
-        const screen = document.querySelector('#screen');
-        let accValuesArray;
-        console.log(buttons);
-        
-        let valuesArray = [];
-        function calculate(button){
-            const value = button.textContent;
-            if (value == "C"){
-                valuesArray = [];
-                screen.value = "";
-            }else if(value=="="){
-                screen.value = eval(accValuesArray);
-            }else{
-                valuesArray.push(value);
-                accValuesArray = valuesArray.join('');
-                screen.value = accValuesArray;
-            }
-        }
-        buttons.forEach(button => button.addEventListener('click',() => calculate(button)));
-
-    </script>
-
-
 </html>
 
 
