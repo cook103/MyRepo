@@ -1,0 +1,50 @@
+body{
+    background-color: black;
+}
+button {
+    background-color: #d66909;
+    border-radius: 8px;
+    border-style: none;
+    box-sizing: border-box;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: inline-block;
+    font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    height: 40px;
+    line-height: 20px;
+    list-style: none;
+    margin: 0;
+    outline: none;
+    padding: 10px 16px;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    transition: color 100ms;
+    vertical-align: baseline;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+#layout{
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    background-color: grey;
+    position:absolute;
+    left: 50px;
+    top: 50px;
+    padding: 30px;
+    border-radius: 10px;
+}
+
+#layout #screen{
+    border-radius: 5px;
+    background-color: rgb(177, 173, 173);
+    padding: 5px;
+}
+
+#layout #zero{
+    padding-right:65px;
+
+}
