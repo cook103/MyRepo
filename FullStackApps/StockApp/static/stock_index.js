@@ -61,7 +61,7 @@ window.onload = function(){
 
     }
 
-    recurring_data();
+    //recurring_data();
     
 
 }
