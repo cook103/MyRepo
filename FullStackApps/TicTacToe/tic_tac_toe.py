@@ -7,7 +7,7 @@ app = Flask(__name__)
 @app.route("/", methods=["GET", "POST"])
 def index():
     """Onload data is sent here"""
-    return render_template("tic_tac_toe.html")
+    return render_template("tic_tac_toe.html", onload_data=onload_data)
 
 def main():
     app.run(debug=True, port="8080")

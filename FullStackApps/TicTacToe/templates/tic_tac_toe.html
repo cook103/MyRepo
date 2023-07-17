@@ -1,0 +1,34 @@
+<!DOCTYPE html lang=en>
+
+    <head>
+        <title>TicTacToe</title>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script src="{{url_for('static', filename='tic_tac_toe.js')}}"></script>
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='tic_tac_toe.css')}}">
+    </head>
+
+    <body>
+        <h1></h1>
+        
+        <!-- default container to manipulate in JS-->
+        
+        <div class="main">
+                <canvas id="crypto_header" width="200" height="200"></canvas>
+                <canvas id="canvas_background" width="2000" height="500"></canvas>
+                
+                
+                <div class="board">
+                 
+                </div>
+        </div>
+
+
+    </body>
+
+    <script type="text/javascript">window.onload_data = ({{ onload_data | tojson }});</script>
+
+
+
+</html>
+
