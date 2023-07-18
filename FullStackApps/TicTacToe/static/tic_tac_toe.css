@@ -1,21 +1,22 @@
 #board {position: relative; top: -10px; left: 20px}
 
-.b{height: 90px; width: 90px; color: black; background: transparent;} 
+.b{ height: 90px; width: 90px; color: black;
+    background: transparent; border: none; color: white;} 
 
-#b1 {position: absolute; left: 45px; top: 30px;}
+#b1{ position: absolute; left: 45px; top: 30px;}
 
-#b2{position: absolute; left: 155px; top: 30px;}
+#b2{ position: absolute; left: 155px; top: 30px;} 
 
-#b3{position: absolute; left: 260px; top: 30px;}
+#b3{ position: absolute; left: 260px; top: 30px;}
 
-#b4 {position: absolute; left: 45px; top: 140px;}
+#b4{ position: absolute; left: 45px; top: 140px;} 
 
-#b5{position: absolute; left: 155px; top: 140px;}
+#b5{ position: absolute; left: 155px; top: 140px;}
 
-#b6{position: absolute; left: 260px; top: 140px;}
+#b6{ position: absolute; left: 260px; top: 140px;}
 
-#b7 {position: absolute; left: 45px; top: 250px;}
+#b7{ position: absolute; left: 45px; top: 250px;} 
 
-#b8{position: absolute; left: 155px; top: 250px;}
+#b8{ position: absolute; left: 155px; top: 250px;}
 
-#b9{position: absolute; left: 260px; top: 250px;}
+#b9{ position: absolute; left: 260px; top: 250px;}
