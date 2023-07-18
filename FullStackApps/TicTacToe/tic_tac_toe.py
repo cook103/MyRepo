@@ -30,14 +30,14 @@ def recieve_square():
     return data["button"]
 
 @app.route("/get_square", methods=["GET"])
-def recieve_square():
+def recieve_square(data):
     """Hand off the O's spot to the user"""
-    data = request.get_json()
-    matrix_clicked["num"] = data["button"]
-    if (matrix_clicked["num"]) == "3":
-        print("success")
+    
+    get_data = {
+        "matrix": data
+    }
 
-    return data["button"]
+    return jsonify(get_data)
 
 def main(): 
     app.run(debug=True, port="8080")
