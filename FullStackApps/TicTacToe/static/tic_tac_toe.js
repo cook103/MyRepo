@@ -5,6 +5,7 @@ window.onload = function(){
         $(".b").click(function(){
             let text = this.textContent;
             text = (text.toString())
+            console.log(text);
             //id to find
             let t_id = "b"+text;
             
@@ -14,7 +15,10 @@ window.onload = function(){
             $("#" + t_id).css("color", "black");
             $("#" + t_id).css("font-size", "80px");
 
-            post_request(text);
+            post_request(text, function(response){
+                console.log(response);
+
+            });
         });
     }
 
@@ -26,15 +30,13 @@ window.onload = function(){
     function get_request(){
         // grab the get request
 
-        let dataToSend = {"button": text };
-
         $.ajax({
             url:'/get_square',
             type: 'GET',
             contentType: "application/json",
-            data: JSON.stringify(dataToSend),
-            success: function(response){
-                    console.log("Response:", response);
+            data: JSON.stringify(data),
+            success: function(data){
+                    console.log("Response:", data);
             },
             error: function(error) {
                 console.error("Error:", error);
@@ -42,8 +44,8 @@ window.onload = function(){
 
         });
     }
-    
-    function post_request(text){
+
+    function post_request(text, callback){
         // make the post request
 
         let dataToSend = {"button": text };
@@ -65,7 +67,6 @@ window.onload = function(){
     }
 
     fill_square();
-    post_request(text)
 }
 
 

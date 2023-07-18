@@ -23,14 +23,13 @@ def index():
 def recieve_square():
     """"Recieve the X's spot from the user"""
     data = request.get_json()
-    matrix_clicked["num"] = data["button"]
-    if matrix_clicked["num"] != str(0):
-        g_matrix[0] = "X" #temporary test case
+    button = data.get("button", None)
+    if button is not None:
+        g_matrix[int(button)] = "X" #temporary test case
         find_best_move(g_matrix)
-    if (matrix_clicked["num"]) == "3":
-        print("success")
-
-    return data["button"]
+        return data["button"]
+    else:
+        raise ValueError("Incorrect Value Occured")
 
 @app.route("/get_square", methods=["GET"])
 def get_square(data):
