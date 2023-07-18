@@ -14,13 +14,24 @@ matrix_clicked = {"num": ""}
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    """Onload data is sent here"""
+    """Host the html page on index"""
     onload_data = "hello"
     return render_template("tic_tac_toe.html", onload_data=onload_data)
 
 
-@app.route("/recieve_square", methods=["POST"])
+@app.route("/post_square", methods=["POST"])
 def recieve_square():
+    """"Recieve the X's spot from the user"""
+    data = request.get_json()
+    matrix_clicked["num"] = data["button"]
+    if (matrix_clicked["num"]) == "3":
+        print("success")
+
+    return data["button"]
+
+@app.route("/get_square", methods=["GET"])
+def recieve_square():
+    """Hand off the O's spot to the user"""
     data = request.get_json()
     matrix_clicked["num"] = data["button"]
     if (matrix_clicked["num"]) == "3":
