@@ -4,7 +4,6 @@ window.onload = function(){
         $(".b").click(function(){
             let text = this.textContent;
             text = (text.toString())
-            console.log(text)
             post_request(text);
         });
     }

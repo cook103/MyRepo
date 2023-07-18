@@ -4,6 +4,12 @@ import requests
 
 app = Flask(__name__)
 
+g_matrix = [
+     0, 0, 0,
+     0, 0, 0,
+     0, 0, 0,
+]
+
 matrix_clicked = {"num": ""}
 
 @app.route("/", methods=["GET", "POST"])
@@ -19,7 +25,7 @@ def recieve_square():
     matrix_clicked["num"] = data["button"]
     if (matrix_clicked["num"]) == "3":
         print("success")
-        
+
     return data["button"]
 
 def main(): 
