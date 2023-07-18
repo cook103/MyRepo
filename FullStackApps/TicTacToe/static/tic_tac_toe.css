@@ -1,6 +1,6 @@
 #board {position: relative; top: -10px; left: 20px}
 
-.b{height: 90px; width: 90px; color: black;}
+.b{height: 90px; width: 90px; color: black; background: transparent;} 
 
 #b1 {position: absolute; left: 45px; top: 30px;}
 
