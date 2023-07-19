@@ -24,7 +24,7 @@ def recieve_square():
     """"Recieve the X's spot from the user"""
     data = request.get_json()
     button = data.get("button", None)
-    if button is not None:
+    if button is not None and len(button) == 1:
         g_matrix[int(button)] = "X" #temporary test case
         find_best_move(g_matrix)
         return data["button"]
