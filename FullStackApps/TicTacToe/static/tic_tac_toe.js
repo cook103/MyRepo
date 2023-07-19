@@ -15,8 +15,12 @@ window.onload = function(){
             $("#" + t_id).css("color", "black");
             $("#" + t_id).css("font-size", "80px");
 
+            // if a button is clicked recieve the backend call
+            let x= recieve_square();
+            console.log("fdf" + x["o"]);
+
             post_request(text, function(response){
-                console.log(response);
+                console.log(response, text);
 
             });
         });
@@ -24,8 +28,10 @@ window.onload = function(){
 
     function recieve_square(){
         // fill in o's with get request
-        console.log("TEST");
+        o = get_request();
+        console.log(o);
     }
+
 
     function get_request(){
         // grab the get request
@@ -33,14 +39,11 @@ window.onload = function(){
         $.ajax({
             url:'/get_square',
             type: 'GET',
-            contentType: "application/json",
-            data: JSON.stringify(data),
+            contentType: "json",
             success: function(data){
                     console.log("Response:", data);
+
             },
-            error: function(error) {
-                console.error("Error:", error);
-            }
 
         });
     }
@@ -57,6 +60,7 @@ window.onload = function(){
             data: JSON.stringify(dataToSend),
             success: function(response){
                     console.log("Response:", response);
+                    console.log(text + callback);
             },
             error: function(error) {
                 console.error("Error:", error);
@@ -67,6 +71,7 @@ window.onload = function(){
     }
 
     fill_square();
+
 }
 
 

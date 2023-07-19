@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 from flask import Flask, render_template, jsonify, request
+import json
 import random
 
 app = Flask(__name__)
+
+
+response = {"o": ""}
 
 g_matrix = [
      "_", "_", "_",
@@ -26,26 +30,25 @@ def recieve_square():
     button = data.get("button", None)
     if button is not None and len(button) == 1:
         g_matrix[int(button)] = "X" #temporary test case
-        find_best_move(g_matrix)
-        return data["button"]
+        response["o"] = (find_best_move(g_matrix))
+        return jsonify(response)
     else:
         raise ValueError("Incorrect Value Occured")
 
-@app.route("/get_square", methods=["GET"])
-def get_square(data):
+def get_square():
     """Hand off the O's spot to the user"""
-    
-    get_data = {
-        "matrix": data
-    }
-
-    return jsonify(get_data)
+    if response["o"] != "":
+        print(response["o"])
+        return jsonify(response)
+    else:
+        return "failed"
 
 def find_best_move(board):
     empty_list = empty_spaces(board)
     print(empty_list)
     print(g_matrix)
-    get_square(random.choice(empty_list))
+    response["o"] = (random.choice(empty_list))
+
 
 def empty_spaces(board):
     empty_list = []
