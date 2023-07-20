@@ -33,10 +33,10 @@ window.onload = function(){
         $.ajax({
             url:'/get_square',
             type: 'GET',
-            contentType: "application/json",
-            data: JSON.stringify(data),
+            contentType: "json",
             success: function(data){
                     console.log("Response:", data);
+                    alert(data);
             },
             error: function(error) {
                 console.error("Error:", error);
@@ -67,6 +67,7 @@ window.onload = function(){
     }
 
     fill_square();
+    get_request();
 }
 
 
