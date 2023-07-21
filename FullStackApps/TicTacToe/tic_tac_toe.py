@@ -5,16 +5,11 @@ import random
 
 app = Flask(__name__)
 
-
-response = {"o": ""}
-
 g_matrix = [
      "_", "_", "_",
      "_", "_", "_",
      "_", "_", "_",
 ]
-
-matrix_clicked = {"num": ""}
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -26,14 +21,15 @@ def index():
 @app.route("/post_square", methods=["POST"])
 def recieve_square():
     """"Recieve the X's spot from the user"""
-    data = request.get_json()
-    button = data.get("button", None)
-    if button is not None and len(button) == 1:
-        g_matrix[int(button)] = "X" #temporary test case
-        response["o"] = (find_best_move(g_matrix))
-        return jsonify(response)
-    else:
-        raise ValueError("Incorrect Value Occured")
+    if request.method == "POST":
+        data = request.get_json()
+        button_clicked = (data["button"])
+        random_num = 2
+        # return number to fill here
+        
+        x = {"o": random_num} # test example
+        return jsonify(x)
+
 
 def get_square():
     """Hand off the O's spot to the user"""

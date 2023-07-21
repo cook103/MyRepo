@@ -1,30 +1,39 @@
 window.onload = function(){
-
-    function fill_square(){
+    
+    function fill_square() {
         // fill x and send response to backend
-        $(".b").click(function(){
-            let text = this.textContent;
-            text = (text.toString())
-            console.log(text);
+        $(".b").click(function() {
+            let elementText = $(this).text(); // Get the text content of the clicked element
+            console.log("Element Text: " + elementText);
             //id to find
-            let t_id = "b"+text;
+            let t_id = elementText;
             
-            $("#" + t_id).text("X");
-            // Make the X element visible to the user
-            $("#" + t_id).css("background", "visible");
-            $("#" + t_id).css("color", "black");
-            $("#" + t_id).css("font-size", "80px");
+            $("#b" + t_id).text("X");
+            $("#b" + t_id).css("background", "visible");
+            $("#b" + t_id).css("color", "black");
+            $("#b" + t_id).css("font-size", "80px");
+    
+            // Make the POST request and receive the data back as a variable
+    
+            post_request(elementText)
+              .then(responseData => {
+                console.log("Received data:", responseData["o"]);
+                setTimeout(() => {  
+                    
+                    $("#b" + responseData["o"]).text("O");
+                    $("#b" + responseData["o"]).css("background", "visible");
+                    $("#b" + responseData["o"]).css("color", "black");
+                    $("#b" + responseData["o"]).css("font-size", "80px");
+                
+                }, 300);
+              })
+              .catch(error => {
+                console.error('Error:', error);
+              });
 
-            // if a button is clicked recieve the backend call
-            let x= recieve_square();
-            console.log("fdf" + x["o"]);
-
-            post_request(text, function(response){
-                console.log(response, text);
-
-            });
         });
     }
+
 
     function recieve_square(){
         // fill in o's with get request
@@ -48,27 +57,27 @@ window.onload = function(){
         });
     }
 
-    function post_request(text, callback){
-        // make the post request
-
-        let dataToSend = {"button": text };
-
-        $.ajax({
-            url:'/post_square',
-            type: 'POST',
-            contentType: "application/json",
-            data: JSON.stringify(dataToSend),
-            success: function(response){
+    function post_request(text) {
+        return new Promise((resolve, reject) => {
+            let dataToSend = { "button": text };
+    
+            $.ajax({
+                url: '/post_square',
+                type: 'POST',
+                contentType: "application/json",
+                data: JSON.stringify(dataToSend),
+                success: function(response) {
                     console.log("Response:", response);
-                    console.log(text + callback);
-            },
-            error: function(error) {
-                console.error("Error:", error);
-            }
-
+                    resolve(response); // Resolve the Promise with the received data
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                    reject(error); // Reject the Promise with the error object
+                }
+            });
         });
-
     }
+    
 
     fill_square();
 
