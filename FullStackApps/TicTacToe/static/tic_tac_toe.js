@@ -14,7 +14,6 @@ window.onload = function(){
             $("#b" + t_id).css("font-size", "80px");
     
             // Make the POST request and receive the data back as a variable
-    
             post_request(elementText)
               .then(responseData => {
                 console.log("Received data:", responseData["o"]);
@@ -34,35 +33,12 @@ window.onload = function(){
         });
     }
 
-
-    function recieve_square(){
-        // fill in o's with get request
-        o = get_request();
-        console.log(o);
-    }
-
-
-    function get_request(){
-        // grab the get request
-
-        $.ajax({
-            url:'/get_square',
-            type: 'GET',
-            contentType: "json",
-            success: function(data){
-                    console.log("Response:", data);
-
-            },
-
-        });
-    }
-
     function post_request(text) {
         return new Promise((resolve, reject) => {
             let dataToSend = { "button": text };
     
             $.ajax({
-                url: '/post_square',
+                url: "/recieve_square",
                 type: 'POST',
                 contentType: "application/json",
                 data: JSON.stringify(dataToSend),
@@ -71,7 +47,7 @@ window.onload = function(){
                     resolve(response); // Resolve the Promise with the received data
                 },
                 error: function(xhr, status, error) {
-                    console.error('Error:', error);
+                    console.error("Error:", error);
                     reject(error); // Reject the Promise with the error object
                 }
             });
