@@ -27,13 +27,13 @@ def recieve_square():
     """ "Recieve the X's spot from the user and
     return the best O's play"""
     if request.method == "POST":
-        print("hello world")
         # X response from client
         data = (request.get_json())["button"]
         g_matrix[int(data)] = X_PLAYER
 
         random_num = find_best_move()
-        x = {"o": random_num}  # test example
+        x = {"o": random_num[0], "game_over": random_num[1], "board": g_matrix}  # test example
+        print(x)
         return jsonify(x)
 
 
@@ -106,7 +106,10 @@ def find_best_move():
     empty_list = empty_spaces(g_matrix)
     print(empty_list)
     print(g_matrix)
-    return best_move
+    game_over = False
+    if(len(empty_list) == 0 or best_val == 10):
+        game_over = True
+    return (best_move, game_over)
 
 
 def empty_spaces(board):
