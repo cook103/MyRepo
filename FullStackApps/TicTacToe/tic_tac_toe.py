@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from flask import Flask, render_template, jsonify, request
+import json
 import random
 
 app = Flask(__name__)
@@ -9,43 +10,35 @@ O_PLAYER = "O"
 EMPTY = "_"
 
 g_matrix = [
-     "_", "_", "_",
-     "_", "_", "_",
-     "_", "_", "_",
+    "_", "_", "_",
+    "_", "_", "_",
+    "_", "_", "_",
 ]
 
-matrix_clicked = {"num": ""}
 
 @app.route("/", methods=["GET", "POST"])
 def index():
     """Host the html page on index"""
-    onload_data = "hello"
-    return render_template("tic_tac_toe.html", onload_data=onload_data)
+    return render_template("tic_tac_toe.html")
 
 
-@app.route("/post_square", methods=["POST"])
+@app.route("/recieve_square", methods=["POST"])
 def recieve_square():
-    """"Recieve the X's spot from the user"""
-    data = request.get_json()
-    button = data.get("button", None)
-    if button is not None:
-        if len(button) == 1:
-            g_matrix[int(button)] = X_PLAYER
-            find_best_move()
-        return data["button"]
-    else:
-        raise ValueError("Incorrect Value Occured")
+    """ "Recieve the X's spot from the user and
+    return the best O's play"""
+    if request.method == "POST":
+        print("hello world")
+        # X response from client
+        data = (request.get_json())["button"]
+        g_matrix[data] = X_PLAYER
 
+        random_num = find_best_move()
+        print(random_num)
+        # return number to fill here
 
-@app.route("/get_square", methods=["GET"])
-def get_square():
-    """Hand off the O's spot to the user"""
-    
-    get_data = {
-        "matrix": "data"
-    }
+        x = {"o": random_num}  # test example
+        return jsonify(x)
 
-    return get_data
 
 
 def score(board):
@@ -116,7 +109,8 @@ def find_best_move():
     empty_list = empty_spaces(g_matrix)
     print(empty_list)
     print(g_matrix)
-    print(best_val)
+    return best_move
+
 
 def empty_spaces(board):
     empty_list = []
@@ -127,8 +121,10 @@ def empty_spaces(board):
         i += 1
     return empty_list
 
-def main(): 
+
+def main():
     app.run(debug=True, port="8080")
+
 
 if __name__ == "__main__":
     main()
