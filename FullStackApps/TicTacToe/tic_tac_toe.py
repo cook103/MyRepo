@@ -30,12 +30,9 @@ def recieve_square():
         print("hello world")
         # X response from client
         data = (request.get_json())["button"]
-        g_matrix[data] = X_PLAYER
+        g_matrix[int(data)] = X_PLAYER
 
         random_num = find_best_move()
-        print(random_num)
-        # return number to fill here
-
         x = {"o": random_num}  # test example
         return jsonify(x)
 
