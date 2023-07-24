@@ -22,3 +22,8 @@ body{ background-color: black;}
 #b7{ position: absolute; left: 155px; top: 250px;}
 
 #b8{ position: absolute; left: 260px; top: 250px;}
+
+
+.restart{position: relative; top: -80px;}
+
+.win{background-color: green;}
