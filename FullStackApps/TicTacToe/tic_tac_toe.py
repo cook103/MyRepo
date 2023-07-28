@@ -29,7 +29,6 @@ def recieve_square():
     if request.method == "POST":
         # X response from client
         data = (request.get_json())["button"]
-        print(data)
         g_matrix[int(data)] = X_PLAYER
 
         random_num = find_best_move()
@@ -41,11 +40,13 @@ def recieve_square():
 @app.route("/clear_board", methods=["POST"])
 def clear():
     if request.method == "POST":
+        global g_matrix
         g_matrix = [
             "_", "_", "_",
             "_", "_", "_",
             "_", "_", "_",
         ]
+    
     return g_matrix     
 
 
@@ -120,6 +121,7 @@ def find_best_move():
     game_over = False
     if(len(empty_list) == 0 or best_val == 10):
         game_over = True
+    print(game_over)
     return (best_move, game_over)
 
 
