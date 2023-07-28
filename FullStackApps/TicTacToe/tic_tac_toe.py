@@ -10,21 +10,33 @@ O_PLAYER = "O"
 EMPTY = "_"
 
 g_matrix = [
-    "_", "_", "_",
-    "_", "_", "_",
-    "_", "_", "_",
+    "_",
+    "_",
+    "_",
+    "_",
+    "_",
+    "_",
+    "_",
+    "_",
+    "_",
 ]
+
+
+def clear_matrix():
+    for i in range(len(g_matrix)): 
+        g_matrix[i] = EMPTY
 
 
 @app.route("/", methods=["GET", "POST"])
 def index():
     """Host the html page on index"""
+    clear_matrix()
     return render_template("tic_tac_toe.html")
 
 
 @app.route("/recieve_square", methods=["POST"])
 def recieve_square():
-    """ "Recieve the X's spot from the user and
+    """Recieve the X's spot from the user and
     return the best O's play"""
     if request.method == "POST":
         # X response from client
@@ -32,40 +44,42 @@ def recieve_square():
         g_matrix[int(data)] = X_PLAYER
 
         random_num = find_best_move()
-        x = {"o": random_num[0], "game_over": random_num[1], "board": g_matrix}  # test example
+        x = {
+            "o": random_num[0],
+            "game_over": random_num[1],
+            "board": g_matrix,
+        }  # test example
         print(x)
         return jsonify(x)
 
 
 @app.route("/clear_board", methods=["POST"])
 def clear():
+    """Clear the board when front end is called"""
     if request.method == "POST":
-        global g_matrix
-        g_matrix = [
-            "_", "_", "_",
-            "_", "_", "_",
-            "_", "_", "_",
-        ]
-    
-    return g_matrix     
+        clear_matrix()
+    return g_matrix
 
 
 def score(board):
     # Checking Rows for X or O win
-    for x in range (3):
-        if board[x*3] == board[(x*3)+1] and board[(x*3)+1] == board[(x*3)+2]:
-            if board[x*3] == X_PLAYER:
+    for x in range(3):
+        if (
+            board[x * 3] == board[(x * 3) + 1]
+            and board[(x * 3) + 1] == board[(x * 3) + 2]
+        ):
+            if board[x * 3] == X_PLAYER:
                 return -10
-            elif board[x*3] == O_PLAYER:
+            elif board[x * 3] == O_PLAYER:
                 return 10
     # Checking Columns for X or O win
-    for x in range (3):
-        if board[x] == board[x+3] and board[x+3] == board[x+6]:
+    for x in range(3):
+        if board[x] == board[x + 3] and board[x + 3] == board[x + 6]:
             if board[x] == X_PLAYER:
                 return -10
             elif board[x] == O_PLAYER:
                 return 10
-    #Checking Diagonals for X or O win
+    # Checking Diagonals for X or O win
     if board[0] == board[4] and board[4] == board[8]:
         if board[0] == X_PLAYER:
             return -10
@@ -86,7 +100,7 @@ def minimax(board, depth, is_maxing):
     # Checking for a draw
     if len(empty_list) == 0:
         return 0
-    if(is_maxing):
+    if is_maxing:
         best_val = -1000
         for space in empty_list:
             board[space] = O_PLAYER
@@ -102,6 +116,7 @@ def minimax(board, depth, is_maxing):
             board[space] = EMPTY
         return best_val
 
+
 def find_best_move():
     best_val = -1000
     best_move = -1
@@ -113,13 +128,13 @@ def find_best_move():
         if move_val > best_val:
             best_move = space
             best_val = move_val
-    
+
     g_matrix[best_move] = O_PLAYER
     empty_list = empty_spaces(g_matrix)
     print(empty_list)
     print(g_matrix)
     game_over = False
-    if(len(empty_list) == 0 or best_val == 10):
+    if len(empty_list) == 0 or best_val == 10:
         game_over = True
     print(game_over)
     return (best_move, game_over)

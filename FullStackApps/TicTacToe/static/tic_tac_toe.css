@@ -27,3 +27,40 @@ body{ background-color: black;}
 .restart{position: relative; top: -80px;}
 
 .win{background-color: green;}
+
+#replay {
+    position: absolute;
+    left: 130px;
+    background-color: #000000;
+    border: 2px solid #f5f5f5;
+    border-radius: 30px;
+    color: #ffffff;
+    cursor: pointer;
+    display: inline-block;
+    font-weight: 600;
+    font-size: 18px;
+    padding: 0 18px;
+    line-height: 50px;
+    text-align: center;
+    text-decoration: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+#replay:hover {
+  background-color: #5a5858;
+  opacity: 0.9;
+}
+
+#replay:active {
+  box-shadow: #422800 2px 2px 0 0;
+  transform: translate(2px, 2px);
+}
+
+@media (min-width: 768px) {
+  #replay {
+    min-width: 120px;
+    padding: 0 25px;
+  }
+}

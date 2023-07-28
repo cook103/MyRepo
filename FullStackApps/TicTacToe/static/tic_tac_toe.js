@@ -1,5 +1,4 @@
 window.onload = function(){
-    let game_array = [];
 
     function fill_square() {
         // fill x and send response to backend
@@ -29,13 +28,14 @@ window.onload = function(){
                 if (response["game_over"] == true){
                     //$(".b").prop("disabled", true);
                     // Example usage:
-                    const ticTacToeBoard = response["board"];
-                    const winningIndexes = checkWinningIndexes(ticTacToeBoard);
+                    let ticTacToeBoard = response["board"];
+                    let winningIndexes = checkWinningIndexes(ticTacToeBoard);
                     console.log("Winning indexes:", winningIndexes); 
                     console.log("game is over");
                     console.log(response["game_over"]);
                     
                     display_win(winningIndexes);
+                    $(".b").prop("disabled", true);
 
                 }
 
@@ -54,13 +54,13 @@ window.onload = function(){
             console.log("reset the game")
             
             for (let index = 0; index<9; index++){
-                $("#b" + index).css("background", "transparent");
+                $("#b" + index).css("background", "");
                 $("#b" + index).css("color", "white");
                 $("#b" + index).text(index);
                 $("#b" + index).removeClass("win");
             }
             
-            //$(".b").prop("disabled", false);
+            $(".b").prop("disabled", false);
             clear();
             
         });
@@ -103,7 +103,7 @@ window.onload = function(){
       
         for (const combination of winningCombinations) {
           const [i, j, k] = combination;
-          if (board[i] === board[j] && board[j] === board[k]) {
+          if (board[i] == board[j] && board[j] == board[k]) {
             return combination; // Return the winning combination if found
           }
         }
