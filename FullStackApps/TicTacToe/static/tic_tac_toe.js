@@ -27,7 +27,6 @@ window.onload = function(){
                 // if the game is over check the board for winning indexes
                 if (response["game_over"] == true){
                     //$(".b").prop("disabled", true);
-                    // Example usage:
                     let ticTacToeBoard = response["board"];
                     let winningIndexes = checkWinningIndexes(ticTacToeBoard);
                     console.log("Winning indexes:", winningIndexes); 
