@@ -1,8 +1,6 @@
 import yfinance as yf
 import pandas as pd
-import math
 import argparse
-import sys
 
 # perpetual growth rate
 PERP_GROWTH_RATE = 0.025
