@@ -51,9 +51,7 @@ def calculate_cash_flow_growth_yoy(p_cash_flow_per_year_lst: list) -> list:
 def calculate_future_free_cash_flow(
     p_last_years_cash_flow: list, p_avg_growth_rate
 ) -> list:
-    # TODO: Dont pass in p_cash_flow_per_year lst we
-    # only need the next year ffcf out of that list which
-    # is calculated below for now.
+
     next_year_ffcf = p_last_years_cash_flow * (1 + p_avg_growth_rate)
 
     # Generate 9 years' worth of future free cash flows
