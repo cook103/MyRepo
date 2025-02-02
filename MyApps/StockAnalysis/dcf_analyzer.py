@@ -2,12 +2,14 @@ import yfinance as yf
 import pandas as pd
 import math
 import argparse
+import sys
 
 # perpetual growth rate
 PERP_GROWTH_RATE = 0.025
 
 # discount rate
 DC_RATE = 0.08
+
 
 def get_all_cash_flows_per_year(p_cash_flow: dict) -> list:
     cash_flow_per_year_lst = []
@@ -24,6 +26,7 @@ def get_all_cash_flows_per_year(p_cash_flow: dict) -> list:
             # add (year, cf) tuple to the list
             cash_flow_per_year_lst.append(cash_flow_year_tup)
 
+    # print("cash flow per year lst"  ,cash_flow_per_year_lst)
     return cash_flow_per_year_lst
 
 
@@ -38,37 +41,47 @@ def calculate_cash_flow_growth_yoy(p_cash_flow_per_year_lst: list) -> list:
         growth_lst.append(growth)
 
     # get average growth rate over past 3 years
-    avg_growth_rate = math.fsum(growth_lst) * 100
+    avg_growth_rate = sum(growth_lst) / len(growth_lst)
 
     print(
-        f"Using Average cash flow growth rate over last {len(p_cash_flow_per_year_lst)} years: {round(avg_growth_rate, 3)}%"
+        f"Using Average cash flow growth rate over last {len(p_cash_flow_per_year_lst)} years: {avg_growth_rate}%"
     )
 
     return avg_growth_rate
 
 
 def calculate_future_free_cash_flow(
-    p_cash_flow_per_year_lst: list, p_avg_growth_rate=10
+    p_last_years_cash_flow: list, p_avg_growth_rate
 ) -> list:
-    future_free_cash_flow_lst = [
-        t_cf_py[1] * (1 + p_avg_growth_rate)
-        for t_cf_py in p_cash_flow_per_year_lst
-    ]
+    # TODO: Dont pass in p_cash_flow_per_year lst we
+    # only need the next year ffcf out of that list which
+    # is calculated below for now.
+    next_year_ffcf = p_last_years_cash_flow * (1 + p_avg_growth_rate)
+
+    # Generate 9 years' worth of future free cash flows
+    ffcf_lst = []
+    for i in range(9):
+        # Calculate the free cash flow for this year
+        ffcf = next_year_ffcf * (1 + p_avg_growth_rate)
+
+        # Append the calculated free cash flow to the list
+        ffcf_lst.append(ffcf)
+
+        # Update next year's free cash flow for the next iteration
+        next_year_ffcf = ffcf
 
     # last future free cash flow in list
-    last_calculated_ffcf = future_free_cash_flow_lst[-1]
+    last_calculated_ffcf = ffcf_lst[-1]
 
     # formula to calculate the future free cash flow  terminal value
     ffcf_terminal_value = (
-        last_calculated_ffcf
-        * (1 + PERP_GROWTH_RATE)
-        / (DC_RATE - PERP_GROWTH_RATE)
+        last_calculated_ffcf * (1 + PERP_GROWTH_RATE) / (DC_RATE - PERP_GROWTH_RATE)
     )
 
     # add terminal value to the end of ffcf list
-    future_free_cash_flow_lst.append(ffcf_terminal_value)
+    ffcf_lst.append(ffcf_terminal_value)
 
-    return future_free_cash_flow_lst
+    return ffcf_lst
 
 
 def calculate_present_value_ffcf(p_future_free_cash_flow_lst) -> list:
@@ -103,13 +116,11 @@ def main():
     parser = argparse.ArgumentParser(description="Fetch Stock Ticker Symbol")
 
     # add positional argument ticker
-    parser.add_argument(
-        "ticker", type=str, help="Ticker symbol of company on NYSE"
-    )
+    parser.add_argument("ticker", type=str, help="Ticker symbol of company on NYSE")
 
     # add positional argument avg growth rate
     parser.add_argument(
-        "-g", "--growth", type=float, help="Amount of YOY growth you assume"
+        "-g", "--growth", type=int, help="Amount of YOY growth you assume"
     )
 
     # parse command line
@@ -120,6 +131,9 @@ def main():
         stock_ticker = yf.Ticker(args.ticker)
     except Exception:
         raise Exception(f"Could not find ticker symbol {args.ticker}")
+
+    # get current stock price
+    current_stock_price = stock_ticker.info["currentPrice"]
 
     # get cash flow
     cash_flow = stock_ticker.cashflow
@@ -146,15 +160,13 @@ def main():
 
     # calculate avg growth on cash flows per year
     if not args.growth:
-        avg_cash_flow_growth_rate = calculate_cash_flow_growth_yoy(
-            cash_flows_per_year
-        )
+        avg_cash_flow_growth_rate = calculate_cash_flow_growth_yoy(cash_flows_per_year)
     else:
-        avg_cash_flow_growth_rate = args.growth
+        avg_cash_flow_growth_rate = args.growth / 100
 
     # calculate future free cash flows
     future_free_cash_flows = calculate_future_free_cash_flow(
-        cash_flows_per_year, p_avg_growth_rate=avg_cash_flow_growth_rate / 100
+        cash_flows_per_year[0][1], avg_cash_flow_growth_rate
     )
 
     # calculate present value of those ffcf's
@@ -170,14 +182,37 @@ def main():
         shares_outstanding,
     )
 
-    apply_margin_of_safety = lambda dcf_pps: dcf_pps * (1 - 0.1)
-    estimated_intrinsic_value_w_margin_of_safety = apply_margin_of_safety(
-        estimated_intrinsic_value
+    apply_margin_of_safety = lambda dcf_pps, mos: dcf_pps * (1 - mos)
+
+    estimated_intrinsic_value_w_margin_of_safety_10 = apply_margin_of_safety(
+        estimated_intrinsic_value, 0.1
     )
 
+    estimated_intrinsic_value_w_margin_of_safety_20 = apply_margin_of_safety(
+        estimated_intrinsic_value, 0.2
+    )
+
+    estimated_intrinsic_value_w_margin_of_safety_30 = apply_margin_of_safety(
+        estimated_intrinsic_value, 0.3
+    )
+
+    estimated_intrinsic_value_w_margin_of_safety_40 = apply_margin_of_safety(
+        estimated_intrinsic_value, 0.4
+    )
+
+    print(f"Current stock price: {current_stock_price}")
     print("Estimated intrinsic value: ", estimated_intrinsic_value)
     print(
-        f"Estimated intrinsic value with margin of safety: {estimated_intrinsic_value_w_margin_of_safety}"
+        f"Estimated intrinsic at 10% margin of safety: {estimated_intrinsic_value_w_margin_of_safety_10}"
+    )
+    print(
+        f"Estimated intrinsic at 20% margin of safety: {estimated_intrinsic_value_w_margin_of_safety_20}"
+    )
+    print(
+        f"Estimated intrinsic at 30% margin of safety: {estimated_intrinsic_value_w_margin_of_safety_30}"
+    )
+    print(
+        f"Estimated intrinsic at 40% margin of safety: {estimated_intrinsic_value_w_margin_of_safety_40}"
     )
 
 
