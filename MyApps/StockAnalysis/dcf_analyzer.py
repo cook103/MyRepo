@@ -128,7 +128,7 @@ def main():
 
     # add positional argument avg growth rate
     parser.add_argument(
-        "-g", "--growth", type=int, help="Amount of YOY growth you assume"
+        "-g", "--growth", type=float, help="Amount of YOY growth you assume"
     )
 
     # parse command line
