@@ -140,8 +140,11 @@ def main():
     except Exception:
         raise Exception(f"Could not find ticker symbol {args.ticker}")
 
+    # get all ticker info
+    ticker_info = stock_ticker.info
+
     # get current stock price
-    current_stock_price = stock_ticker.info["currentPrice"]
+    current_stock_price = ticker_info["currentPrice"]
 
     # get cash flow
     cash_flow = stock_ticker.cashflow
@@ -202,7 +205,7 @@ def main():
     print(f"Possibly: {over_or_under_valued(current_stock_price, estimated_intrinsic_value)}")
 
     # margins to compare dcf intrinsic value to
-    margins_of_safety_to_calculate = [10, 15, 25, 30, 35, 40]
+    margins_of_safety_to_calculate = [10, 15, 20, 25, 30, 35, 40]
 
     # calculate acceptable buy prices at specific mos
     for mos in margins_of_safety_to_calculate:
@@ -212,6 +215,8 @@ def main():
         print(
             f"Estimated intrinsic at {mos}% margin of safety: {estimated_intrinsic_value_w_mos}"
         )
+
+    print(f"Wall street Average price target: {ticker_info['targetMeanPrice']}")
 
 
 if __name__ == "__main__":
