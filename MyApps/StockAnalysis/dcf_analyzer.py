@@ -24,11 +24,10 @@ def get_all_cash_flows_per_year(p_cash_flow: dict) -> list:
             # add (year, cf) tuple to the list
             cash_flow_per_year_lst.append(cash_flow_year_tup)
 
-    # print("cash flow per year lst"  ,cash_flow_per_year_lst)
     return cash_flow_per_year_lst
 
 
-def calculate_cash_flow_growth_yoy(p_cash_flow_per_year_lst: list) -> list:
+def calculate_cash_flow_growth_yoy(p_cash_flow_per_year_lst: list) -> float:
     growth_lst = []
     for i in range(0, len(p_cash_flow_per_year_lst) - 1):
         # formula for calculating cash flow growth each year
@@ -49,15 +48,17 @@ def calculate_cash_flow_growth_yoy(p_cash_flow_per_year_lst: list) -> list:
 
 
 def calculate_future_free_cash_flow(
-    p_last_years_cash_flow: list, p_avg_growth_rate
+    p_last_years_cash_flow: int, p_avg_growth_rate: int
 ) -> list:
+    ffcf_lst = []
 
     next_year_ffcf = p_last_years_cash_flow * (1 + p_avg_growth_rate)
+    ffcf_lst.append(next_year_ffcf)
 
-    # Generate 9 years' worth of future free cash flows
-    ffcf_lst = []
-    for i in range(9):
-        # Calculate the free cash flow for this year
+    future_years = 8
+    # Generate 8 more years' worth of future free cash flows
+    for _ in range(future_years):
+        # Calculate the next ffcf
         ffcf = next_year_ffcf * (1 + p_avg_growth_rate)
 
         # Append the calculated free cash flow to the list
@@ -69,7 +70,7 @@ def calculate_future_free_cash_flow(
     # last future free cash flow in list
     last_calculated_ffcf = ffcf_lst[-1]
 
-    # formula to calculate the future free cash flow  terminal value
+    # formula to calculate the future free cash flow terminal value
     ffcf_terminal_value = (
         last_calculated_ffcf * (1 + PERP_GROWTH_RATE) / (DC_RATE - PERP_GROWTH_RATE)
     )
@@ -81,11 +82,22 @@ def calculate_future_free_cash_flow(
 
 
 def calculate_present_value_ffcf(p_future_free_cash_flow_lst) -> list:
-    # formula to calculate present value free cash flow per year (year, pv_ffcf) tuple
-    pv_future_free_cash_flow_lst = [
-        t_ffcf_py / (1 + DC_RATE) ** year
-        for year, t_ffcf_py in enumerate(p_future_free_cash_flow_lst, start=1)
-    ]
+    # formula to calculate present value free cash flow per year
+    pv_future_free_cash_flow_lst = []
+    for year, t_ffcf_py in enumerate(p_future_free_cash_flow_lst):
+        year += 1
+        if year == 10:
+            # skip we will calculate terminal value for the 10th year
+            break
+        else:
+            pv_ffcf = t_ffcf_py / (1 + DC_RATE) ** year
+            pv_future_free_cash_flow_lst.append(pv_ffcf)
+
+    # calculate present value terminal value
+    pv_future_free_cash_flow_lst.append(
+        p_future_free_cash_flow_lst[-1] / (1 + DC_RATE) ** 10
+    )
+
     return pv_future_free_cash_flow_lst
 
 
