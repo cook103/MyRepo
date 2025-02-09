@@ -190,38 +190,28 @@ def main():
         shares_outstanding,
     )
 
+    # Anonymous helper function to check valuation
+    over_or_under_valued = lambda curr_price, intr_val : \
+        "Overvalued" if curr_price > intr_val else "Undervalued"
+
+    # Anonymous helper function to apply margin of safety
     apply_margin_of_safety = lambda dcf_pps, mos: dcf_pps * (1 - mos)
 
-    estimated_intrinsic_value_w_margin_of_safety_10 = apply_margin_of_safety(
-        estimated_intrinsic_value, 0.1
-    )
-
-    estimated_intrinsic_value_w_margin_of_safety_20 = apply_margin_of_safety(
-        estimated_intrinsic_value, 0.2
-    )
-
-    estimated_intrinsic_value_w_margin_of_safety_30 = apply_margin_of_safety(
-        estimated_intrinsic_value, 0.3
-    )
-
-    estimated_intrinsic_value_w_margin_of_safety_40 = apply_margin_of_safety(
-        estimated_intrinsic_value, 0.4
-    )
-
     print(f"Current stock price: {current_stock_price}")
-    print("Estimated intrinsic value: ", estimated_intrinsic_value)
-    print(
-        f"Estimated intrinsic at 10% margin of safety: {estimated_intrinsic_value_w_margin_of_safety_10}"
-    )
-    print(
-        f"Estimated intrinsic at 20% margin of safety: {estimated_intrinsic_value_w_margin_of_safety_20}"
-    )
-    print(
-        f"Estimated intrinsic at 30% margin of safety: {estimated_intrinsic_value_w_margin_of_safety_30}"
-    )
-    print(
-        f"Estimated intrinsic at 40% margin of safety: {estimated_intrinsic_value_w_margin_of_safety_40}"
-    )
+    print(f"Estimated intrinsic value: {estimated_intrinsic_value}")
+    print(f"Possibly: {over_or_under_valued(current_stock_price, estimated_intrinsic_value)}")
+
+    # margins to compare dcf intrinsic value to
+    margins_of_safety_to_calculate = {10, 15, 25, 30, 35, 40}
+
+    # calculate acceptable buy prices at specific mos
+    for mos in margins_of_safety_to_calculate:
+        estimated_intrinsic_value_w_mos = apply_margin_of_safety(
+            estimated_intrinsic_value, mos / 100
+        )
+        print(
+            f"Estimated intrinsic at {mos}% margin of safety: {estimated_intrinsic_value_w_mos}"
+        )
 
 
 if __name__ == "__main__":
