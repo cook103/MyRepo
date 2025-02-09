@@ -41,7 +41,7 @@ def calculate_cash_flow_growth_yoy(p_cash_flow_per_year_lst: list) -> float:
     avg_growth_rate = sum(growth_lst) / len(growth_lst)
 
     print(
-        f"Using Average cash flow growth rate over last {len(p_cash_flow_per_year_lst)} years: {avg_growth_rate}%"
+        f"Using Average cash flow growth rate over last {len(p_cash_flow_per_year_lst)} years: {avg_growth_rate * 100}%"
     )
 
     return avg_growth_rate
@@ -202,7 +202,7 @@ def main():
     print(f"Possibly: {over_or_under_valued(current_stock_price, estimated_intrinsic_value)}")
 
     # margins to compare dcf intrinsic value to
-    margins_of_safety_to_calculate = {10, 15, 25, 30, 35, 40}
+    margins_of_safety_to_calculate = [10, 15, 25, 30, 35, 40]
 
     # calculate acceptable buy prices at specific mos
     for mos in margins_of_safety_to_calculate:
