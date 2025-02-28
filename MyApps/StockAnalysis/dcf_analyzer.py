@@ -1,9 +1,11 @@
 import yfinance as yf
 import pandas as pd
 import argparse
+import json
 
 # perpetual growth rate
-PERP_GROWTH_RATE = 0.025
+# PERP_GROWTH_RATE = 0.025
+PERP_GROWTH_RATE = 0.03
 
 # discount rate
 DC_RATE = 0.08
@@ -123,8 +125,16 @@ def main():
     # create argument parser obj
     parser = argparse.ArgumentParser(description="Fetch Stock Ticker Symbol")
 
+    # add optional argument for verbose mode
+    parser.add_argument(
+            "-v", "--verbose",
+            action="store_true",
+            help="verbose mode: creates a file with more ticker info"
+    )
+
     # add positional argument ticker
     parser.add_argument("ticker", type=str, help="Ticker symbol of company on NYSE")
+
 
     # add positional argument avg growth rate
     parser.add_argument(
@@ -142,6 +152,11 @@ def main():
 
     # get all ticker info
     ticker_info = stock_ticker.info
+
+    # create a file with additional information if verbose flag was provided.
+    if parser.verbose:
+        with open("data.json", "w") as f:
+            json.dump(ticker_info, f, indent=4)
 
     # get current stock price
     current_stock_price = ticker_info["currentPrice"]
@@ -164,7 +179,7 @@ def main():
     ]
 
     # total company shares outstanding
-    shares_outstanding = stock_ticker.info["sharesOutstanding"]
+    shares_outstanding = stock_ticker.info["impliedSharesOutstanding"]
 
     # get list of cash flows per year
     cash_flows_per_year = get_all_cash_flows_per_year(cash_flow)
