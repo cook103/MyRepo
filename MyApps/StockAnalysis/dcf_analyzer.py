@@ -154,8 +154,8 @@ def main():
     ticker_info = stock_ticker.info
 
     # create a file with additional information if verbose flag was provided.
-    if parser.verbose:
-        with open("data.json", "w") as f:
+    if args.verbose:
+        with open("ticker-data.json", "w") as f:
             json.dump(ticker_info, f, indent=4)
 
     # get current stock price
