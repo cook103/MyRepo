@@ -13,27 +13,31 @@ def calculate_analyst_yoy_gain_prediction(tickers: list):
     for ticker in tickers:
         try:
             stock_ticker = yf.Ticker(ticker)
-        except Exception:
-            print(f"Could not find ticker symbol {ticker}")
+        except Exception as e:
+            print(f"Could not find ticker symbol {ticker}. Error msg: {e}")
         else:
-            stock_info = stock_ticker.info
-            stock_curr_price = stock_info.get("currentPrice")
-            stock_prediction_price = stock_info.get("targetMeanPrice")
+            try:
+                stock_info = stock_ticker.info
+            except Exception as e:
+                print(f"Failed to find ticker info for {ticker}. Error msg: {e}")
+            else:
+                stock_curr_price = stock_info.get("currentPrice")
+                stock_prediction_price = stock_info.get("targetMeanPrice")
 
-            if stock_curr_price and stock_prediction_price:
-                # calculate gain
-                estimated_percentage_change = (
-                    ((stock_prediction_price - stock_curr_price) / stock_curr_price) * 100
-                )
+                if stock_curr_price and stock_prediction_price:
+                    # calculate gain
+                    estimated_percentage_change = (
+                        ((stock_prediction_price - stock_curr_price) / stock_curr_price) * 100
+                    )
 
-                stock_data_and_estimated_percent_change = (
-                    ticker,
-                    stock_curr_price,
-                    stock_prediction_price,
-                    estimated_percentage_change
-                )
+                    stock_data_and_estimated_percent_change = (
+                        ticker,
+                        stock_curr_price,
+                        stock_prediction_price,
+                        estimated_percentage_change
+                    )
 
-                stock_data_lst.append(stock_data_and_estimated_percent_change)
+                    stock_data_lst.append(stock_data_and_estimated_percent_change)
 
     return stock_data_lst
 
@@ -52,6 +56,11 @@ def main():
     args = parser.parse_args()
 
     sp_500_tickers = get_tickers_from_csv(SP_500_TICKERS_PATH)
+
+    print(
+        f"This might take a while, making {len(sp_500_tickers)} requests for tickers found in csv.\n"
+    )
+
     sp_500_anyalyst_predictions = calculate_analyst_yoy_gain_prediction(sp_500_tickers)
 
     out_file_name = f"analyst_{args.percent_growth}_percent_growth_tickers.txt"
