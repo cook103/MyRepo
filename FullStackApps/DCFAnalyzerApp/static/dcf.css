@@ -1,0 +1,163 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body and general page styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Form container */
+.form-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;  /* Ensures the form doesn't stretch too wide */
+    margin: 20px;
+}
+
+/* Heading styles */
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Label styles */
+label {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 8px;
+    display: block;
+}
+
+/* Input field styles */
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+/* Input focus effect */
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+    border-color: #4CAF50;
+    outline: none;
+}
+
+/* Button styles */
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #4CAF50;
+    color: #fff;
+    font-size: 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+/* Button hover effect */
+button:hover {
+    background-color: #45a049;
+}
+
+/* General styles for the list and paragraphs */
+p {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+/* Make the list items look better */
+li {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 8px;
+    list-style-type: none;  /* Remove default list bullets */
+    padding-left: 20px;     /* Indentation for each list item */
+    position: relative;
+}
+
+/* Add a bullet-like effect using a pseudo-element */
+li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #4CAF50;  /* Green color for the bullet */
+    font-size: 1.2rem;
+}
+
+/* Style for the Margin of Safety section */
+p:first-of-type {
+    color: #4CAF50;
+    font-size: 1.4rem;
+}
+
+/* For better spacing and cleaner look */
+br {
+    margin-bottom: 10px;
+}
+
+/* Container for better alignment and spacing */
+div {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+/* Mobile-first styles */
+@media (max-width: 600px) {
+    .form-container {
+        padding: 15px;
+        width: 90%;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+        font-size: 1rem;  /* Adjust font size for better readability */
+        padding: 10px;
+    }
+
+    button {
+        font-size: 1rem;  /* Button text size for mobile */
+        padding: 10px;
+    }
+
+    h2 {
+        font-size: 1.5rem;  /* Adjust heading size on mobile */
+    }
+}
+
+/* For very small devices (e.g., portrait mode of smaller phones like iPhone SE) */
+@media (max-width: 400px) {
+    .form-container {
+        padding: 12px;
+    }
+
+    h2 {
+        font-size: 1.25rem;
+    }
+}
+

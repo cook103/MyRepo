@@ -1,0 +1,50 @@
+<!DOCTYPE html lang=en>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='dcf.css')}}">
+        <title>dcf analyzer</title>
+    </head>
+
+    <body>
+        <h1></h1>
+        
+        <!-- default container to manipulate in JS-->
+        
+        <div class="form-container">
+            <h2 id="head">DCF Calculator</h2>
+            <form action="/" method="POST">
+                <label for="ticker">Ticker:</label>
+                <input type="text" id=ticker name=ticker></label><br><br>
+                <label for="growth-rate">Growth Rate %:</label>
+                <input type="text" id=rate name=rate></label><br><br>
+                <button type="submit" value="submit">Submit</button>
+            </form>
+
+            {% if reply_message %}
+                {% if 'error' in reply_message %}
+                    <br><p>Error:</p>
+                    <p>Error occured: {{ reply_message.get('error') }}</p>
+                {% else %}
+                    <br><p>Intrinsic Value Calculation:</p>
+                    {% for key, value in reply_message.items() %}
+                        {% if key == "intrinsic_value_with_mos" %}
+                            <br>
+                            <p>Margin of safety:</p>
+                            {% for k, v in value.items() %}
+                                <li>{{ k }}: {{ v }}</li>
+                            {% endfor %}
+                        {% else %}
+                            <li>{{ key }}: {{ value }}</li>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {% endif %}
+
+        </div>
+    </body>
+
+</html>
+
