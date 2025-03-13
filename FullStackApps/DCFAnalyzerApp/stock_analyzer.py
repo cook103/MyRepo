@@ -14,7 +14,7 @@ except Exception as e:
 
 app = Flask(__name__)
 
-@app.route("/", methods=["POST"])
+@app.route("/", methods=["GET", "POST"])
 def return_index():
     """Onload data is sent here"""
     reply_message = {}
@@ -22,21 +22,17 @@ def return_index():
         if request.form.get("ticker") and request.form.get("rate"):
             ticker = request.form.get("ticker")
             rate =request.form.get("rate")
-            
             try:
                 rate = float(rate)
             except ValueError:
                 reply_message = {"error": "growth rate must be a number."}
-                
             try:
                 reply_message = DCFModel(ticker, rate).run_model()
             except Exception as e:
                 reply_message = {"error": e}
-
-            return render_template("dcf.html", reply_message=reply_message)
         else:
             reply_message= {"error": "Please fill in all required fields."}
-            return render_template("dcf.html", reply_message=reply_message)
+    return render_template("dcf.html", reply_message=reply_message)
             
 def main():
     app.run(debug=True, host="0.0.0.0", port="8081")
