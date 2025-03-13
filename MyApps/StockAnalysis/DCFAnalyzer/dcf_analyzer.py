@@ -1,11 +1,10 @@
-import yfinance as yf
 import pandas as pd
 import json
+import sys
+import os
 from typing import Dict, Union
-
-class InvalidTicker(Exception):
-    def __init__(self, message="Invalid ticker symbol or no data available."):
-        super().__init__(message)
+sys.path.append(os.path.abspath("../"))
+import utils
 
 class DCFModel:
     # perpetual growth rate
@@ -14,7 +13,7 @@ class DCFModel:
     DC_RATE = 0.08
 
     def __init__(self, ticker: str, growth_rate: Union[int, float] = None):
-        yfinance_ticker_obj = self.ensure_ticker_is_valid(ticker)
+        yfinance_ticker_obj = utils.ensure_ticker_is_valid(ticker)
         self.ticker_info = yfinance_ticker_obj.info
         self.ticker_balance_sheet = yfinance_ticker_obj.balance_sheet
         self.ticker_cash_flow = yfinance_ticker_obj.cash_flow
@@ -29,20 +28,6 @@ class DCFModel:
             # calculate average growth rate
             self.all_cash_flows_py = self.get_all_cash_flows_per_year()
             self.growth_rate = self.calculate_cash_flow_growth_yoy()
-
-
-    @staticmethod
-    def ensure_ticker_is_valid(ticker: str) -> yf.Ticker:
-        try:
-            ticker = yf.Ticker(ticker)
-            data = ticker.history(period="1d")
-        except Exception as e:
-            raise InvalidTicker()
-        else:
-            if data.empty:
-                raise InvalidTicker()
-            else:
-                return ticker
 
 
     def calculate_cash_flow_growth_yoy(self) -> float:
