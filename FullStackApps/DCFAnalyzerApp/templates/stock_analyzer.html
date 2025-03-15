@@ -1,0 +1,37 @@
+<!DOCTYPE html lang=en>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script src="{{url_for('static', filename='stock_analyzer.js')}}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='stock_analyzer.css')}}">
+        <title>Stock Analyzer</title>
+    </head>
+
+    <body>
+        <div class="form-container">
+
+            <span class=model_select_buttons>
+                <button class=model_select_button id=dcf>dcf model</button>
+                <button class=model_select_button id=multiple>multiple model</button>
+            </span>
+
+            <div id=loadingIcon>
+                <i class="fa fa-spinner fa-spin" style="font-size: 20px;"></i>
+            </div>
+
+            <h2 id="head">Stock Analyzer</h2>
+            <label for="ticker">Ticker:</label>
+            <input type="text" id=ticker name=ticker></label>
+            <label for="growth-rate">Growth Rate %:</label>
+            <input type="text" id=rate name=rate></label>
+            <button type="submit" id=submit value="submit">Submit</button>
+
+            <span class=reply-data>
+            </span>
+    </body>
+
+</html>
+
