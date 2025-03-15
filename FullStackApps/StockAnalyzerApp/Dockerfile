@@ -1,20 +1,18 @@
 FROM python:3.9-slim
 
-WORKDIR /app
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends git && \
+    apt-get purge -y --auto-remove && \
+    rm -rf /var/lib/apt/lists/
 
-COPY stock_analyzer.py /app/
+RUN git clone https://github.com/cook103/MyRepo.git
 
-COPY ../../MyApps/StockAnalysis/DCFAnalyzer/dcf_analyzer.py /app/
+RUN chmod +x MyRepo/FullStackApps/StockAnalyzerApp/stock_analyzer.py
 
-COPY requirements.txt /app/
-
-COPY static/ /app/static
-COPY templates/ /app/templates
-
-RUN chmod +x /app/stock_analyzer.py
+WORKDIR MyRepo/FullStackApps/StockAnalyzerApp
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-EXPOSE 8001
+EXPOSE 8080
 
-ENTRYPOINT ["python3", "/app/stock_analyzer.py"]
+ENTRYPOINT ["./stock_analyzer.py"]
