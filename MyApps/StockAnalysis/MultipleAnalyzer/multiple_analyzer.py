@@ -56,7 +56,7 @@ class MultipleModel:
         return earnings_data
 
 
-    def get_average_price(self):
+    def get_average_pps(self):
         all_estimates = []
         try:
             ttm_price_to_earnings = self.ticker_info["trailingPE"]
@@ -70,6 +70,26 @@ class MultipleModel:
             all_estimates.append(ttm_price_to_earnings * earnings_estimates_map["Low Estimate"])
             all_estimates.append(ttm_price_to_earnings * earnings_estimates_map["High Estimate"])
 
-            avg_price = sum(all_estimates) / len(all_estimates)
+            multiple_pps = sum(all_estimates) / len(all_estimates)
 
-            return avg_price
+            return round(multiple_pps, 2)
+
+
+    def run_model(self):
+        estimated_intrinsic_value = self.get_average_pps()
+
+        current_stock_price = self.ticker_info["currentPrice"]
+        
+        # Anonymous helper function to check valuation
+        over_or_under_valued = lambda curr_price, intr_val : \
+            "Overvalued" if curr_price > intr_val else "Undervalued"
+        
+        multiple_details_dict = {
+            "ticker": self.ticker_info["symbol"],
+            "over_undervalued": over_or_under_valued(current_stock_price, estimated_intrinsic_value),
+            "current_price": current_stock_price,
+            "wall_street_estimate": self.ticker_info["targetMeanPrice"],
+            "intrinsic_value": estimated_intrinsic_value
+        }
+
+        return multiple_details_dict

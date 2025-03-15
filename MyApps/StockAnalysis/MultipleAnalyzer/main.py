@@ -10,7 +10,7 @@ def main():
 
     # parse command line
     args = parser.parse_args()
-    print("End year estimated value: ", m_model.MultipleModel(args.ticker).get_average_price())
+    print("End year estimated value: ", m_model.MultipleModel(args.ticker).run_model())
 
 if __name__ == "__main__":
     main()
