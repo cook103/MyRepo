@@ -96,7 +96,7 @@ def handle_model_change():
     except IndexError:
         print("Failed to convert reply message to JSON.")
     else:
-        return jsonify(reply_message)
+        return reply_message
 
 
 def main():
