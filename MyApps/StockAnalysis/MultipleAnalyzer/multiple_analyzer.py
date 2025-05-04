@@ -1,5 +1,5 @@
 import yfinance as yf
-import requests
+from curl_cffi import requests
 import sys
 import os
 from bs4 import BeautifulSoup
@@ -9,7 +9,7 @@ import utils
 class MultipleModel:
 
     def __init__(self, ticker: str):
-        self.session = requests.session()
+        self.session = requests.Session(impersonate="chrome")
         yfinance_ticker_obj = utils.ensure_ticker_is_valid(ticker)
         self.ticker_info = yfinance_ticker_obj.info
 
