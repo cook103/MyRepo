@@ -35,7 +35,7 @@ def handle_form_accept():
     if request.method == "POST":
         if g_dcf_default:
             # run the dcf model
-            if request.form.get("picker") and request.form.get("rate"):
+            if request.form.get("ticker") and request.form.get("rate"):
                 ticker = request.form.get("ticker")
                 rate = request.form.get("rate")
                 try:

@@ -1,2 +1,2 @@
 #!/bin/bash
-docker run -p 5007:5007 stock-analyzer-app -p 5007
+sudo docker run -p 5007:5007 stock-analyzer-app:v2 -p 5007
