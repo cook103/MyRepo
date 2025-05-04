@@ -35,17 +35,17 @@ def handle_form_accept():
     if request.method == "POST":
         if g_dcf_default:
             # run the dcf model
-            if request.form.get("ticker") and request.form.get("rate"):
+            if request.form.get("picker") and request.form.get("rate"):
                 ticker = request.form.get("ticker")
                 rate = request.form.get("rate")
                 try:
                     rate = float(rate)
                 except ValueError:
-                    error = e
+                    error = str(e)
                 try:
                     reply_message = DCFModel(ticker, rate).run_model()
                 except Exception as e:
-                    error = e
+                    error = str(e)
                 else:
                     reply_message["model"] = "dcf"
             else:
@@ -57,21 +57,21 @@ def handle_form_accept():
                 try:
                     reply_message = MultipleModel(ticker).run_model()
                 except Exception as e:
-                    error = e
+                    error = str(e)
                 else:
                     reply_message["model"] = "multiple"
             else:
                 error = "Please fill in all required fields."
-
+ 
     if error is not None:
         reply_message = {"error": error}
 
     try:
-        reply_message = jsonify(reply_message)
-    except IndexError:
-        print("Failed to convert reply message to JSON.")
+        return jsonify(reply_message)
+    except Exception as e:
+        print("Failed to convert reply message to JSON:", str(e))
     else:
-        return reply_message
+        return jsonify({"error": "Internal server error during response formatting."}), 500
     
 
 @app.route("/handle_model_change", methods=["POST"])
@@ -96,7 +96,7 @@ def handle_model_change():
     except IndexError:
         print("Failed to convert reply message to JSON.")
     else:
-        return reply_message
+        return jsonify(reply_message)
 
 
 def main():

@@ -13,10 +13,26 @@ class DCFModel:
     DC_RATE = 0.08
 
     def __init__(self, ticker: str, growth_rate: Union[int, float] = None):
-        yfinance_ticker_obj = utils.ensure_ticker_is_valid(ticker)
-        self.ticker_info = yfinance_ticker_obj.info
-        self.ticker_balance_sheet = yfinance_ticker_obj.balance_sheet
-        self.ticker_cash_flow = yfinance_ticker_obj.cash_flow
+        self.ticker = ticker.upper()
+        if self.ticker in utils.cache_storage:
+            # dont make requests, use cached data
+            yfinance_ticker_obj = utils.cache_storage[self.ticker]["yf_ticker_obj"]
+            self.ticker_info = utils.cache_storage[self.ticker]["ticker_info"]
+            self.ticker_balance_sheet = utils.cache_storage[self.ticker]["ticker_balance_sheet"]
+            self.ticker_cash_flow = utils.cache_storage[self.ticker]["ticker_cash_flow"]
+        else:
+            yfinance_ticker_obj = utils.ensure_ticker_is_valid(self.ticker)
+            self.ticker_info = yfinance_ticker_obj.info
+            self.ticker_balance_sheet = yfinance_ticker_obj.balance_sheet
+            self.ticker_cash_flow = yfinance_ticker_obj.cash_flow
+
+            utils.cache_storage[self.ticker] = {
+                "yf_ticker_obj": yfinance_ticker_obj,
+                "ticker_info": self.ticker_info,
+                "ticker_balance_sheet": self.ticker_balance_sheet,
+                "ticker_cash_flow": self.ticker_cash_flow,
+            }
+
         self.all_cash_flows_py = None
 
         if growth_rate is not None:
@@ -28,6 +44,7 @@ class DCFModel:
             # calculate average growth rate
             self.all_cash_flows_py = self.get_all_cash_flows_per_year()
             self.growth_rate = self.calculate_cash_flow_growth_yoy()
+
 
 
     def calculate_cash_flow_growth_yoy(self) -> float:
