@@ -34,6 +34,15 @@ window.onload = function() {
         submitForm(ticker_input, rate_input);
     });
 
+    $('#ticker, #rate').on('keydown', function(e) {
+        if (e.key === 'Enter') {
+	    e.preventDefault();
+	    var ticker_input = $('#ticker').val();
+	    var rate_input = $('#rate').val();
+	    submitForm(ticker_input, rate_input);
+        }
+    });
+
     function submitForm(t, r) {
         // show loading icon and lock events
         $('#loadingIcon').show();
@@ -48,6 +57,8 @@ window.onload = function() {
                 // form response data is received here
                 const responseMap = new Map(Object.entries(response));
                 if ("error" in response) {
+		    $('#loadingIcon').hide();
+		    $('.form-container').css('pointer-events', '');
                     console.log(response["error"]);
                     alert(response["error"]);
                 } else {
