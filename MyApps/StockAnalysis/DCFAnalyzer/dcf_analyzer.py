@@ -13,7 +13,7 @@ class DCFModel:
     DC_RATE = 0.08
 
     def __init__(self, ticker: str, growth_rate: Union[int, float] = None):
-        self.ticker = ticker.upper()
+        self.ticker = ticker.strip().upper()
         if self.ticker in utils.cache_storage:
             # dont make requests, use cached data
             yfinance_ticker_obj = utils.cache_storage[self.ticker]["yf_ticker_obj"]

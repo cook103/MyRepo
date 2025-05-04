@@ -9,8 +9,9 @@ import utils
 class MultipleModel:
 
     def __init__(self, ticker: str):
+        self.ticker = ticker.strip().upper()
         self.session = requests.Session(impersonate="chrome")
-        yfinance_ticker_obj = utils.ensure_ticker_is_valid(ticker)
+        yfinance_ticker_obj = utils.ensure_ticker_is_valid(self.ticker)
         self.ticker_info = yfinance_ticker_obj.info
 
 
