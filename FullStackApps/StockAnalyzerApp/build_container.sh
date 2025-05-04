@@ -1,2 +1,2 @@
 #!/bin/bash
-sudo docker build --no-cache -f Dockerfile -t stock-analyzer-app:v2 .
+sudo docker build --no-cache -f Dockerfile -t stock-analyzer-app:latest .
