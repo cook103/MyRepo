@@ -1,0 +1,15 @@
+[Unit]
+Description=Stock Analyzer Application
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=simple
+WorkingDirectory=/home/dboolin/gitrepos/MyRepo/FullStackApps/StockAnalyzerApp
+ExecStart=/bin/bash /home/dboolin/gitrepos/MyRepo/FullStackApps/StockAnalyzerApp/start_container.sh
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target
+
