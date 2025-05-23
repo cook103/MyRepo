@@ -1,8 +1,8 @@
 import yfinance as yf
-from curl_cffi import requests
 import sys
 import os
 from bs4 import BeautifulSoup
+from curl_cffi import requests
 sys.path.append(os.path.abspath("../"))
 import utils
 
@@ -16,6 +16,10 @@ class MultipleModel:
 
 
     def get_earnings_estimates(self):
+
+        if self.ticker in utils.earnings_estimates_cache:
+            return utils.earnings_estimates_cache[self.ticker]
+
         url = f"https://finance.yahoo.com/quote/{self.ticker_info['symbol']}/analysis/"
 
         # Define a User-Agent to simulate a real browser request
@@ -53,6 +57,11 @@ class MultipleModel:
                     
                     # Store the data in the earnings_data dictionary
                     earnings_data[key] = float(value)
+
+        if not earnings_data:
+            raise ValueError("Failed to scrape earnings information.")
+
+        utils.earnings_estimates_cache[self.ticker] = earnings_data
 
         return earnings_data
 

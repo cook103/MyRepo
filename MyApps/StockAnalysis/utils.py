@@ -9,6 +9,7 @@ from zoneinfo import ZoneInfo
 # globals
 DAYS_IN_SECONDS = 86400
 cache_storage = {}
+earnings_estimates_cache = {}
 session = requests.Session(impersonate="chrome")
 
 class ResetHour(enum.Enum):
