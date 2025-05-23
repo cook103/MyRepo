@@ -17,8 +17,9 @@ class MultipleModel:
 
     def get_earnings_estimates(self):
 
-        if self.ticker in utils.earnings_estimates_cache:
-            return utils.earnings_estimates_cache[self.ticker]
+        with utils.CACHE_MUTEX:
+            if self.ticker in utils.earnings_estimates_cache:
+                return utils.earnings_estimates_cache[self.ticker]
 
         url = f"https://finance.yahoo.com/quote/{self.ticker_info['symbol']}/analysis/"
 
@@ -61,7 +62,8 @@ class MultipleModel:
         if not earnings_data:
             raise ValueError("Failed to scrape earnings information.")
 
-        utils.earnings_estimates_cache[self.ticker] = earnings_data
+        with utils.CACHE_MUTEX:
+            utils.earnings_estimates_cache[self.ticker] = earnings_data
 
         return earnings_data
 

@@ -6,8 +6,13 @@ from curl_cffi import requests
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
-# globals
+### globals
+
+# const
 DAYS_IN_SECONDS = 86400
+CACHE_MUTEX = threading.Lock()
+
+# non const
 cache_storage = {}
 earnings_estimates_cache = {}
 session = requests.Session(impersonate="chrome")
@@ -45,6 +50,9 @@ def start_cache_reset_thread(reset_hour=ResetHour.THREE_AM.value) -> None:
 
             sleep_seconds = (next_run - now).total_seconds()
             time.sleep(sleep_seconds)
-            cache_storage.clear()
+
+            with CACHE_MUTEX:
+                cache_storage.clear()
+                earnings_estimates_cache.clear()
 
     threading.Thread(target=reset_cache, daemon=True).start()

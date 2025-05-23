@@ -16,22 +16,24 @@ class DCFModel:
         self.ticker = ticker.strip().upper()
         if self.ticker in utils.cache_storage:
             # dont make requests, use cached data
-            self.yfinance_ticker_obj = utils.cache_storage[self.ticker]["yf_ticker_obj"]
-            self.ticker_info = utils.cache_storage[self.ticker]["ticker_info"]
-            self.ticker_balance_sheet = utils.cache_storage[self.ticker]["ticker_balance_sheet"]
-            self.ticker_cash_flow = utils.cache_storage[self.ticker]["ticker_cash_flow"]
+            with utils.CACHE_MUTEX:
+                self.yfinance_ticker_obj = utils.cache_storage[self.ticker]["yf_ticker_obj"]
+                self.ticker_info = utils.cache_storage[self.ticker]["ticker_info"]
+                self.ticker_balance_sheet = utils.cache_storage[self.ticker]["ticker_balance_sheet"]
+                self.ticker_cash_flow = utils.cache_storage[self.ticker]["ticker_cash_flow"]
         else:
             self.yfinance_ticker_obj = utils.ensure_ticker_is_valid(self.ticker)
             self.ticker_info = self.yfinance_ticker_obj.info
             self.ticker_balance_sheet = self.yfinance_ticker_obj.balance_sheet
             self.ticker_cash_flow = self.yfinance_ticker_obj.cash_flow
 
-            utils.cache_storage[self.ticker] = {
-                "yf_ticker_obj": self.yfinance_ticker_obj,
-                "ticker_info": self.ticker_info,
-                "ticker_balance_sheet": self.ticker_balance_sheet,
-                "ticker_cash_flow": self.ticker_cash_flow,
-            }
+            with utils.CACHE_MUTEX:
+                utils.cache_storage[self.ticker] = {
+                    "yf_ticker_obj": self.yfinance_ticker_obj,
+                    "ticker_info": self.ticker_info,
+                    "ticker_balance_sheet": self.ticker_balance_sheet,
+                    "ticker_cash_flow": self.ticker_cash_flow,
+                }
 
         self.all_cash_flows_py = None
 
