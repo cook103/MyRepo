@@ -7,6 +7,12 @@ from flask import Flask, render_template, request, jsonify
 sys.path.append(os.path.abspath("../../MyApps/StockAnalysis"))
 
 try:
+    import utils
+except Exception as e:
+    print(f"Failed to import utils, error {e}.")
+    sys.exit(1)
+
+try:
     from DCFAnalyzer.dcf_analyzer import DCFModel
 except Exception as e:
     print(f"Failed to import DCFModel, error {e}.")
@@ -116,7 +122,10 @@ def main():
         # use defualt port 8080
         port = "8080"
 
+    # kick off thread to grab new data everyday
+    utils.start_cache_reset_thread()
     app.run(debug=True, host="0.0.0.0", port=port)
+
 
 if __name__ == "__main__":
     main()

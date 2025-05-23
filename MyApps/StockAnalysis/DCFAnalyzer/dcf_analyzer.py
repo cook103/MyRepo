@@ -16,18 +16,18 @@ class DCFModel:
         self.ticker = ticker.strip().upper()
         if self.ticker in utils.cache_storage:
             # dont make requests, use cached data
-            yfinance_ticker_obj = utils.cache_storage[self.ticker]["yf_ticker_obj"]
+            self.yfinance_ticker_obj = utils.cache_storage[self.ticker]["yf_ticker_obj"]
             self.ticker_info = utils.cache_storage[self.ticker]["ticker_info"]
             self.ticker_balance_sheet = utils.cache_storage[self.ticker]["ticker_balance_sheet"]
             self.ticker_cash_flow = utils.cache_storage[self.ticker]["ticker_cash_flow"]
         else:
-            yfinance_ticker_obj = utils.ensure_ticker_is_valid(self.ticker)
-            self.ticker_info = yfinance_ticker_obj.info
-            self.ticker_balance_sheet = yfinance_ticker_obj.balance_sheet
-            self.ticker_cash_flow = yfinance_ticker_obj.cash_flow
+            self.yfinance_ticker_obj = utils.ensure_ticker_is_valid(self.ticker)
+            self.ticker_info = self.yfinance_ticker_obj.info
+            self.ticker_balance_sheet = self.yfinance_ticker_obj.balance_sheet
+            self.ticker_cash_flow = self.yfinance_ticker_obj.cash_flow
 
             utils.cache_storage[self.ticker] = {
-                "yf_ticker_obj": yfinance_ticker_obj,
+                "yf_ticker_obj": self.yfinance_ticker_obj,
                 "ticker_info": self.ticker_info,
                 "ticker_balance_sheet": self.ticker_balance_sheet,
                 "ticker_cash_flow": self.ticker_cash_flow,
@@ -177,7 +177,7 @@ class DCFModel:
 
     def run_model(self) -> Dict[str, Union[str, int, float]]:
         # get current stock price
-        current_stock_price = self.ticker_info["currentPrice"]
+        current_stock_price = self.yfinance_ticker_obj.info["regularMarketPrice"]
 
         # calculate intrinsic valueV
         estimated_intrinsic_value = self.get_discounted_cashflow_pps()
