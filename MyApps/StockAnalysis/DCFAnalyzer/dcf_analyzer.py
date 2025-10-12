@@ -194,7 +194,7 @@ class DCFModel:
         percentage_gain = round(
             (estimated_intrinsic_value - current_stock_price) / current_stock_price,
             2
-        )
+        ) * 100
 
 
         dcf_details_dict = {
