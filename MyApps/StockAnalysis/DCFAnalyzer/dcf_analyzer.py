@@ -191,6 +191,12 @@ class DCFModel:
         # Anonymous helper function to apply margin of safety
         apply_margin_of_safety = lambda dcf_pps, mos: round(dcf_pps * (1 - mos), 2)
 
+        percentage_gain = round(
+            (estimated_intrinsic_value - current_stock_price) / current_stock_price,
+            2
+        )
+
+
         dcf_details_dict = {
             "ticker": self.ticker_info["symbol"],
             "growth_rate_suggestion": self.growth_rate * 100,
@@ -198,6 +204,7 @@ class DCFModel:
             "current_price": current_stock_price,
             "wall_street_estimate": self.ticker_info["targetMeanPrice"],
             "intrinsic_value": estimated_intrinsic_value,
+            "potential_percentage_gain": percentage_gain if percentage_gain > 0 else 0
         }
 
         # margins to compare dcf intrinsic value to

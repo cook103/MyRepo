@@ -72,6 +72,7 @@ window.onload = function() {
                         $replySpan.append('<h2>' + response['ticker'] + ': ' + response['over_undervalued'] + '</h2>');
                         $replySpan.append('<li>Current Price: ' + response['current_price'] + '</li>');
                         $replySpan.append('<li>Intrinsic Value: ' + response['intrinsic_value'] + '</li>');
+                        $replySpan.append('<li>Potential Percentage Gain: ' + response['potential_percentage_gain'] + '%' + '</li>');
                         $replySpan.append('<li>Wall Street Estimate: ' + response['wall_street_estimate'] + '</li>');
                         $replySpan.append('<p>Margin of Safety Increments</p>');
                         const mosMap = new Map(Object.entries(response['intrinsic_value_with_mos']));
