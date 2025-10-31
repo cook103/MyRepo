@@ -71,7 +71,7 @@ class MultipleModel:
     def get_average_pps(self):
         all_estimates = []
         try:
-            ttm_price_to_earnings = self.ticker_info["trailingPE"]
+            ttm_price_to_earnings = self.ticker_info["forwardPE"]
         except KeyError:
             raise ValueError("Failed to get multiple from yfinance.")
         else:
