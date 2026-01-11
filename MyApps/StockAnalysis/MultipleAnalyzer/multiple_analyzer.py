@@ -79,8 +79,8 @@ class MultipleModel:
             # E x M = P
             earnings_estimates_map = self.get_earnings_estimates()
             all_estimates.append(ttm_price_to_earnings * earnings_estimates_map["Avg. Estimate"])
-            all_estimates.append(ttm_price_to_earnings * earnings_estimates_map["Low Estimate"])
-            all_estimates.append(ttm_price_to_earnings * earnings_estimates_map["High Estimate"])
+            # all_estimates.append(ttm_price_to_earnings * earnings_estimates_map["Low Estimate"])
+            # all_estimates.append(ttm_price_to_earnings * earnings_estimates_map["High Estimate"])
 
             multiple_pps = sum(all_estimates) / len(all_estimates)
 
