@@ -7,7 +7,7 @@ RUN apt-get update && \
 
 RUN git clone https://github.com/cook103/MyRepo.git
 
-RUN chmod +x MyRepo/FullStackApps/StockAnalyzerApp/stock_analyzer.py
+RUN chmod +x MyRepo/FullStackApps/StockAnalyzerApp/run_app.py
 
 WORKDIR MyRepo/FullStackApps/StockAnalyzerApp
 
@@ -15,4 +15,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 8080
 
-ENTRYPOINT ["./stock_analyzer.py"]
+ENTRYPOINT ["./run_app.py"]

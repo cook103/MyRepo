@@ -1,16 +1,10 @@
-#!/usr/bin/env python3
 import sys
 import os
-import argparse
-from flask import Flask, render_template, request, jsonify
+
+import extensions
+from flask import render_template, request, jsonify
 
 sys.path.append(os.path.abspath("../../MyApps/StockAnalysis"))
-
-try:
-    import utils
-except Exception as e:
-    print(f"Failed to import utils, error {e}.")
-    sys.exit(1)
 
 try:
     from DCFAnalyzer.dcf_analyzer import DCFModel
@@ -24,17 +18,15 @@ except Exception as e:
     print(f"Failed to import MultipleModel, error {e}.")
     sys.exit(1)
 
-app = Flask(__name__)
-
 # default model to use onload
 g_dcf_default = True
 
-@app.route("/", methods=["GET", "POST"])
+@extensions.app.route("/", methods=["GET", "POST"])
 def return_index():
     # initial render of html
     return render_template("stock_analyzer.html")
 
-@app.route("/acceptForm", methods=["POST"])
+@extensions.app.route("/acceptForm", methods=["POST"])
 def handle_form_accept():
     reply_message = {}
     error = None
@@ -73,14 +65,16 @@ def handle_form_accept():
         reply_message = {"error": error}
 
     try:
-        return jsonify(reply_message)
+        reply = jsonify(reply_message)
     except Exception as e:
         print("Failed to convert reply message to JSON:", str(e))
-    else:
         return jsonify({"error": "Internal server error during response formatting."}), 500
+    else:
+        # success
+        extensions.database_dcf_run_queue.put(reply_message)
+        return reply
     
-
-@app.route("/handle_model_change", methods=["POST"])
+@extensions.app.route("/handle_model_change", methods=["POST"])
 def handle_model_change():
     global g_dcf_default
     reply_message = {}
@@ -104,28 +98,22 @@ def handle_model_change():
     else:
         return reply_message
 
+@extensions.app.route("/dcf/history", methods=["GET"])
+def get_dcf_history():
+    # Get all runs, newest first
+    runs = extensions.DCFRun.query.order_by(
+        extensions.DCFRun.created_at.desc()
+    ).all()
 
-def main():
-    parser = argparse.ArgumentParser(description="Stock Analyzer Web App")
-
-    parser.add_argument(
-        "-p", "--port",
-        type=str,
-        help="TCP port to host server on"
-    )
-
-    args = parser.parse_args()
-
-    if args.port:
-        port = args.port
-    else:
-        # use defualt port 8080
-        port = "8080"
-
-    # kick off thread to grab new data everyday
-    utils.start_cache_reset_thread()
-    app.run(debug=True, host="0.0.0.0", port=port)
+    # Convert to JSON-friendly format
+    return jsonify([
+        {
+            "id": r.id,
+            "created_at": r.created_at.isoformat(),
+            "dcf_details": r.dcf_details,
+            "model_version": r.model_version
+        }
+        for r in runs
+    ])
 
 
-if __name__ == "__main__":
-    main()
