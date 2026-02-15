@@ -1,16 +1,10 @@
-#!/usr/bin/env python3
 import sys
 import os
-import argparse
-from flask import Flask, render_template, request, jsonify
+
+from extensions import app
+from flask import render_template, request, jsonify
 
 sys.path.append(os.path.abspath("../../MyApps/StockAnalysis"))
-
-try:
-    import utils
-except Exception as e:
-    print(f"Failed to import utils, error {e}.")
-    sys.exit(1)
 
 try:
     from DCFAnalyzer.dcf_analyzer import DCFModel
@@ -23,8 +17,6 @@ try:
 except Exception as e:
     print(f"Failed to import MultipleModel, error {e}.")
     sys.exit(1)
-
-app = Flask(__name__)
 
 # default model to use onload
 g_dcf_default = True
@@ -104,28 +96,3 @@ def handle_model_change():
     else:
         return reply_message
 
-
-def main():
-    parser = argparse.ArgumentParser(description="Stock Analyzer Web App")
-
-    parser.add_argument(
-        "-p", "--port",
-        type=str,
-        help="TCP port to host server on"
-    )
-
-    args = parser.parse_args()
-
-    if args.port:
-        port = args.port
-    else:
-        # use defualt port 8080
-        port = "8080"
-
-    # kick off thread to grab new data everyday
-    utils.start_cache_reset_thread()
-    app.run(debug=True, host="0.0.0.0", port=port)
-
-
-if __name__ == "__main__":
-    main()
