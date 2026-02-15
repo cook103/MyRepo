@@ -1,7 +1,7 @@
 import sys
 import os
 
-from extensions import app
+import extensions
 from flask import render_template, request, jsonify
 
 sys.path.append(os.path.abspath("../../MyApps/StockAnalysis"))
@@ -21,12 +21,12 @@ except Exception as e:
 # default model to use onload
 g_dcf_default = True
 
-@app.route("/", methods=["GET", "POST"])
+@extensions.app.route("/", methods=["GET", "POST"])
 def return_index():
     # initial render of html
     return render_template("stock_analyzer.html")
 
-@app.route("/acceptForm", methods=["POST"])
+@extensions.app.route("/acceptForm", methods=["POST"])
 def handle_form_accept():
     reply_message = {}
     error = None
@@ -65,14 +65,17 @@ def handle_form_accept():
         reply_message = {"error": error}
 
     try:
-        return jsonify(reply_message)
+        reply = jsonify(reply_message)
     except Exception as e:
         print("Failed to convert reply message to JSON:", str(e))
-    else:
         return jsonify({"error": "Internal server error during response formatting."}), 500
+    else:
+        # success
+        extensions.database_dcf_run_queue.put(reply_message)
+        return reply
     
 
-@app.route("/handle_model_change", methods=["POST"])
+@extensions.app.route("/handle_model_change", methods=["POST"])
 def handle_model_change():
     global g_dcf_default
     reply_message = {}

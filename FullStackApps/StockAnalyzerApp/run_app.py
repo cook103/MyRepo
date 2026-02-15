@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import argparse
 import routes
-from extensions import db, app
+import extensions
 
 try:
     import utils
@@ -29,7 +29,13 @@ def main():
     # kick off thread to grab new data everyday
     utils.start_cache_reset_thread()
 
-    app.run(debug=True, host="0.0.0.0", port=port)
+    with extensions.app.app_context():
+        extensions.db.create_all()
+
+    # kick off thread for processing database entries
+    extensions.process_runs_into_database()
+
+    extensions.app.run(debug=True, host="0.0.0.0", port=port)
 
 
 if __name__ == "__main__":
