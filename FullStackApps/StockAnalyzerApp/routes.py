@@ -74,7 +74,6 @@ def handle_form_accept():
         extensions.database_dcf_run_queue.put(reply_message)
         return reply
     
-
 @extensions.app.route("/handle_model_change", methods=["POST"])
 def handle_model_change():
     global g_dcf_default
@@ -98,4 +97,23 @@ def handle_model_change():
         print("Failed to convert reply message to JSON.")
     else:
         return reply_message
+
+@extensions.app.route("/dcf/history", methods=["GET"])
+def get_dcf_history():
+    # Get all runs, newest first
+    runs = extensions.DCFRun.query.order_by(
+        extensions.DCFRun.created_at.desc()
+    ).all()
+
+    # Convert to JSON-friendly format
+    return jsonify([
+        {
+            "id": r.id,
+            "created_at": r.created_at.isoformat(),
+            "dcf_details": r.dcf_details,
+            "model_version": r.model_version
+        }
+        for r in runs
+    ])
+
 
