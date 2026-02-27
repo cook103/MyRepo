@@ -18,8 +18,11 @@ except Exception as e:
     print(f"Failed to import MultipleModel, error {e}.")
     sys.exit(1)
 
+# all stock analyzer models
+g_models = ["dcf", "reverse_dcf", "multiple"]
+
 # default model to use onload
-g_dcf_default = True
+g_current_model = "dcf"
 
 @extensions.app.route("/", methods=["GET", "POST"])
 def return_index():
@@ -31,7 +34,7 @@ def handle_form_accept():
     reply_message = {}
     error = None
     if request.method == "POST":
-        if g_dcf_default:
+        if g_current_model == "dcf":
             # run the dcf model
             if request.form.get("ticker") and request.form.get("rate"):
                 ticker = request.form.get("ticker")
@@ -48,7 +51,19 @@ def handle_form_accept():
                     reply_message["model"] = "dcf"
             else:
                 error = "Please fill in all required fields."
-        else:
+        elif g_current_model == "reverse_dcf":
+            # run the reverse-dcf model
+            if request.form.get("ticker"):
+                ticker = request.form.get("ticker")
+                try:
+                    reply_message = DCFModel(ticker).run_reverse_model()
+                except Exception as e:
+                    error = str(e)
+                else:
+                    reply_message["model"] = "reverse_dcf"
+            else:
+                error = "Please fill in all required fields."
+        elif g_current_model == "multiple":
             # run the multiples model
             if request.form.get("ticker"):
                 ticker = request.form.get("ticker")
@@ -76,15 +91,13 @@ def handle_form_accept():
     
 @extensions.app.route("/handle_model_change", methods=["POST"])
 def handle_model_change():
-    global g_dcf_default
+    global g_current_model
     reply_message = {}
     error = None
     selected_button = request.form.get("selected_button")
 
-    if selected_button == "dcf":
-        g_dcf_default = True
-    elif selected_button == "multiple":
-        g_dcf_default = False
+    if selected_button in g_models:
+        g_current_model = selected_button
     else:
         error = "failed to set selected model"
     

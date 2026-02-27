@@ -2,26 +2,36 @@ window.onload = function() {
     const $replySpan = $('.reply-data');
     const rateInput = document.getElementById('rate');
     const rateLabel = document.querySelector('label[for="growth-rate"]');
+    const dcfButton = document.getElementById('dcf');
+
+    // Set initial active button.
+    dcfButton.classList.add("active");
 
     $('#dcf').click(function(e) {
         e.preventDefault(); // Prevent default button action
-        const multiple_button = document.getElementById('multiple');
-        multiple_button.style.color = 'black';
-        multiple_button.style.backgroundColor = 'white';
-        e.target.style.backgroundColor = '#4CAF50';
-        e.target.style.color = 'white'; 
+        const buttons = document.querySelectorAll('.model_select_button');
+	buttons.forEach(button => { button.classList.remove("active"); });
+	this.classList.add("active");
         rateInput.style.display = 'inline';
         rateLabel.style.display = 'inline';
         handleModelChange('dcf');
     });
 
+    $('#reverse-dcf').click(function(e) {
+        e.preventDefault(); // Prevent default button action
+        const buttons = document.querySelectorAll('.model_select_button');
+	buttons.forEach(button => { button.classList.remove("active"); });
+	this.classList.add("active");
+        rateInput.style.display = 'none';
+        rateLabel.style.display = 'none';
+	handleModelChange('reverse_dcf');
+    });
+
     $('#multiple').click(function(e) {
         e.preventDefault(); // Prevent default button action
-        const dcf_button = document.getElementById('dcf');
-        dcf_button.style.color = 'black';
-        dcf_button.style.backgroundColor = 'white';
-        e.target.style.backgroundColor = '#4CAF50';
-        e.target.style.color = 'white'; 
+        const buttons = document.querySelectorAll('.model_select_button');
+	buttons.forEach(button => { button.classList.remove("active"); });
+	this.classList.add("active");
         rateInput.style.display = 'none';
         rateLabel.style.display = 'none';
         handleModelChange('multiple');
@@ -71,6 +81,19 @@ window.onload = function() {
                     if (model == "dcf") {
                         $replySpan.append('<h2>' + response['ticker'] + ': ' + response['over_undervalued'] + '</h2>');
                         $replySpan.append('<li>Current Price: ' + response['current_price'] + '</li>');
+                        $replySpan.append('<li>Intrinsic Value: ' + response['intrinsic_value'] + '</li>');
+                        $replySpan.append('<li>Potential Percentage Gain: ' + response['potential_percentage_gain'] + '%' + '</li>');
+                        $replySpan.append('<li>Wall Street Estimate: ' + response['wall_street_estimate'] + '</li>');
+                        $replySpan.append('<p>Margin of Safety Increments</p>');
+                        const mosMap = new Map(Object.entries(response['intrinsic_value_with_mos']));
+                        for (const [k, v] of mosMap) {
+                            $replySpan.append('<li>' + k + ': ' + v + '</li>');
+                        }
+                        $replySpan.append('<br>');
+                    } else if (model == "reverse_dcf") {
+                        $replySpan.append('<h2>' + response['ticker'] + ': ' + response['over_undervalued'] + '</h2>');
+                        $replySpan.append('<li>Current Price: ' + response['current_price'] + '</li>');
+                        $replySpan.append('<li>Implied Growth Rate: ' + response['implied_rate'] + '</li>');
                         $replySpan.append('<li>Intrinsic Value: ' + response['intrinsic_value'] + '</li>');
                         $replySpan.append('<li>Potential Percentage Gain: ' + response['potential_percentage_gain'] + '%' + '</li>');
                         $replySpan.append('<li>Wall Street Estimate: ' + response['wall_street_estimate'] + '</li>');
