@@ -231,5 +231,8 @@ class DCFModel:
     def run_reverse_model(self, kw_initial_guess=0.2): # default initial guess 20%
         EV = self.ticker_info.get("marketCap")
         TTM_FCF = self.get_all_cash_flows_per_year()[0][1]
-        return fsolve(self.reverse_dcf_equation, kw_initial_guess, args=(EV, TTM_FCF))[0]
+        self.growth_rate = fsolve(self.reverse_dcf_equation, kw_initial_guess, args=(EV, TTM_FCF))[0]
+        dcf_details_dict = self.run_model()
+        dcf_details_dict["implied_rate"] = round(self.growth_rate * 100, 2)
+        return dcf_details_dict
 
