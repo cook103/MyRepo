@@ -1,8 +1,11 @@
-import pandas as pd
 import json
 import sys
 import os
+import pandas as pd
+
+from scipy.optimize import fsolve
 from typing import Dict, Union
+
 sys.path.append(os.path.abspath("../"))
 import utils
 
@@ -217,3 +220,16 @@ class DCFModel:
         dcf_details_dict["intrinsic_value_with_mos"] = margin_estimates
 
         return dcf_details_dict
+
+    def reverse_dcf_equation(self, x: float, EV: float, TTM_FCF: float):
+        NUM_YEARS = 10
+        PV_FCF = sum([TTM_FCF * (1+x)**t / (1+self.DC_RATE)**t for t in range(1, NUM_YEARS+1)])
+        TV = TTM_FCF * (1+x)**NUM_YEARS * (1+self.PERP_GROWTH_RATE) / (self.DC_RATE-self.PERP_GROWTH_RATE)
+        PV_TV = TV / (1+self.DC_RATE)**NUM_YEARS
+        return PV_FCF + PV_TV - EV
+
+    def run_reverse_model(self, kw_initial_guess=0.2): # default initial guess 20%
+        EV = self.ticker_info.get("marketCap")
+        TTM_FCF = self.get_all_cash_flows_per_year()[0][1]
+        return fsolve(self.reverse_dcf_equation, kw_initial_guess, args=(EV, TTM_FCF))[0]
+
