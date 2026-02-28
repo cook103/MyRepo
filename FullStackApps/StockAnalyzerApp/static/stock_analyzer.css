@@ -70,6 +70,32 @@ input:focus {
     outline: none;
 }
 
+
+#history_button {
+    background-color: black;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    height: 50px;
+    width: 100%;               /* Full width of the form container */
+    margin-bottom: 0px;       /* Adds space below the button group */
+    margin-top: 0px;       /* Adds space below the button group */
+    border-radius: 0px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0
+}
+
+#history_button:hover {
+    opacity: 0.8;
+}
+
+#history_button.active {
+    background-color: #428df5;
+    color: white;
+}
+
 .model_select_buttons {
     font-size: 1rem;
     display: flex;             /* Ensures buttons are aligned side by side */
@@ -89,9 +115,12 @@ input:focus {
     font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.3s;
-    border-radius: 4px;
     margin: 0;
     padding: 20px;
+}
+
+.model_select_button:hover {
+    background-color: lightgrey;
 }
 
 .model_select_button.active {
@@ -106,7 +135,6 @@ button {
     background-color: #428df5;;
     color: #fff;
     font-size: 1rem;
-    border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s;
     border: none;
@@ -116,7 +144,7 @@ button {
 
 /* Button hover effect */
 #submit:hover {
-    background-color: #3e7bc9;
+    opacity: 0.8;
 }
 
 /* General styles for the list and paragraphs */
